@@ -1,5 +1,8 @@
 # Triển khai lên server
 
+> Muốn dùng **Vercel** cho frontend? Vercel không chạy được .NET nên phải tách đôi —
+> xem [DEPLOY-VERCEL.md](DEPLOY-VERCEL.md). Tài liệu này nói về cách gộp một process.
+
 Dự án deploy theo kiểu **gộp một process**: frontend sau khi build được đặt vào `wwwroot` của
 API, nên chỉ có một ứng dụng chạy và web dùng chung origin với API. Cách này bỏ được ba thứ
 hay gây lỗi khi tách riêng: cấu hình CORS, cấu hình rewrite cho SPA, và biến `VITE_API_BASE_URL`.

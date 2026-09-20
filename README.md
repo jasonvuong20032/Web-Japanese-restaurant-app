@@ -27,4 +27,5 @@ npm run dev
 | --- | --- |
 | [docs/README.md](docs/README.md) | Hướng dẫn chạy đầy đủ, cấu trúc thư mục, bảng endpoint |
 | [docs/PLANNING.md](docs/PLANNING.md) | Kế hoạch chi tiết: phạm vi, kiến trúc, mô hình dữ liệu, quy tắc nghiệp vụ, cách kiểm tra |
-| [docs/DEPLOY.md](docs/DEPLOY.md) | Triển khai lên server bằng Docker hoặc chạy trực tiếp, kèm các bẫy cần tránh |
+| [docs/DEPLOY.md](docs/DEPLOY.md) | Triển khai lên server bằng Docker (kèm HTTPS tự động) hoặc chạy trực tiếp |
+| [docs/DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md) | Deploy tách đôi: frontend lên Vercel, API .NET lên Render |
