@@ -4,7 +4,32 @@ Dự án deploy theo kiểu **gộp một process**: frontend sau khi build đư
 API, nên chỉ có một ứng dụng chạy và web dùng chung origin với API. Cách này bỏ được ba thứ
 hay gây lỗi khi tách riêng: cấu hình CORS, cấu hình rewrite cho SPA, và biến `VITE_API_BASE_URL`.
 
-## Cách 1 — Docker (khuyến nghị)
+## Cách 1 — Docker Compose kèm HTTPS (khuyến nghị)
+
+Cách này dựng hai container: app và **Caddy** làm reverse proxy. Caddy tự xin và tự gia hạn
+chứng chỉ Let's Encrypt, nên không phải chạy `certbot` hay đặt cron gì thêm.
+
+**Điều kiện:** tên miền đã trỏ bản ghi `A` về IP server, và cổng 80 với 443 của server mở ra
+Internet. Let's Encrypt cần cả hai để xác thực quyền sở hữu tên miền.
+
+```bash
+DOMAIN=sakuratei.example.com docker compose up -d --build
+```
+
+Chờ khoảng một phút cho Caddy lấy chứng chỉ, rồi mở `https://sakuratei.example.com`.
+Xem tiến trình xin chứng chỉ:
+
+```bash
+docker compose logs -f caddy
+```
+
+App **không publish cổng ra ngoài** — chỉ Caddy nói chuyện được với nó, nên không ai vào thẳng
+bằng HTTP cổng 8080 được. Chứng chỉ lưu trong volume `caddy_data`; đừng xoá volume này vì
+Let's Encrypt giới hạn số lần cấp chứng chỉ mỗi tuần.
+
+## Cách 2 — Chỉ Docker, không HTTPS
+
+Dùng khi chạy thử trong mạng nội bộ, hoặc khi đã có sẵn reverse proxy khác phía trước.
 
 ```bash
 docker build -t sakura-tei .
@@ -21,7 +46,7 @@ curl http://<địa-chỉ-server>/health
 `Dockerfile` dựng ba tầng: Node build frontend → SDK .NET publish backend kèm `wwwroot` →
 ảnh runtime `aspnet:9.0`. Ảnh cuối chạy bằng người dùng thường, không phải root.
 
-## Cách 2 — Chạy trực tiếp trên server (không Docker)
+## Cách 3 — Chạy trực tiếp trên server (không Docker)
 
 Cần .NET Runtime 9 trên server. Dựng ở máy phát triển:
 
@@ -47,8 +72,8 @@ ASPNETCORE_ENVIRONMENT=Production ASPNETCORE_URLS=http://0.0.0.0:8080 \
   dotnet SakuraTei.Api.dll
 ```
 
-Trên server thật nên cho chạy dưới **systemd** để tự khởi động lại, và đặt **Nginx/Caddy**
-phía trước để lo TLS.
+Trên server thật nên cho chạy dưới **systemd** để tự khởi động lại, và đặt **Caddy** hoặc
+**Nginx** phía trước để lo TLS — cách 1 đã làm sẵn việc này bằng Docker Compose.
 
 <details>
 <summary>Ví dụ unit systemd</summary>
