@@ -1,0 +1,148 @@
+@import 'tailwindcss';
+
+/* Dark mode theo class trên <html>, do script inline trong index.html gắn trước khi React chạy. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Be Vietnam Pro', ui-sans-serif, system-ui, sans-serif;
+  --font-jp: 'Noto Serif JP', ui-serif, Georgia, serif;
+
+  /* Bảng màu thương hiệu — giá trị cố định, không đổi theo chế độ sáng/tối. */
+  --color-shu-50: #fdf3f1;
+  --color-shu-100: #fbe3de;
+  --color-shu-200: #f6c4ba;
+  --color-shu-300: #ee9a89;
+  --color-shu-400: #e4604c;
+  --color-shu-500: #c6402f;
+  --color-shu-600: #a93424;
+  --color-shu-700: #8a2a1d;
+  --color-shu-800: #6b2018;
+  --color-shu-900: #4a1710;
+
+  --color-sakura-100: #fbe9ed;
+  --color-sakura-200: #f5cdd6;
+  --color-sakura-300: #eda9b8;
+  --color-sakura-400: #e2899a;
+  --color-sakura-500: #d06a80;
+
+  --color-matcha-300: #a8c08a;
+  --color-matcha-500: #6f8f4f;
+  --color-matcha-600: #59743e;
+
+  --color-ai-400: #4a5f91;
+  --color-ai-600: #2c3e63;
+  --color-ai-800: #1c2842;
+
+  --color-gold-400: #cfa45c;
+  --color-gold-500: #b8893b;
+
+  /* Token ngữ nghĩa — được ghi đè trong .dark bên dưới, nên mọi utility dùng
+     var() sẽ tự đổi theo chế độ mà không cần viết dark: ở từng chỗ. */
+  --color-surface: #fbf7f0;
+  --color-raised: #ffffff;
+  --color-sunken: #f3ebdf;
+  --color-line: #e5d9c7;
+  --color-line-soft: #efe6d8;
+  --color-ink: #241f1c;
+  --color-ink-soft: #52483f;
+  --color-ink-muted: #7a6e63;
+  --color-brand: #c6402f;
+  --color-brand-hover: #a93424;
+  --color-on-brand: #fff8f4;
+
+  --radius-card: 1rem;
+
+  --shadow-soft: 0 1px 2px rgb(36 31 28 / 0.04), 0 8px 24px -12px rgb(36 31 28 / 0.18);
+  --shadow-lift: 0 2px 4px rgb(36 31 28 / 0.06), 0 18px 40px -16px rgb(36 31 28 / 0.28);
+
+  --animate-fade-up: fade-up 0.5s ease-out both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.dark {
+  --color-surface: #14110f;
+  --color-raised: #1e1a17;
+  --color-sunken: #0d0b0a;
+  --color-line: #342c26;
+  --color-line-soft: #272119;
+  --color-ink: #f2eae0;
+  --color-ink-soft: #cabdb0;
+  --color-ink-muted: #9b8f83;
+  --color-brand: #e4604c;
+  --color-brand-hover: #ee9a89;
+  --color-on-brand: #1a0f0c;
+
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.7);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.5), 0 18px 40px -16px rgb(0 0 0 / 0.8);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Viền focus thống nhất, đủ tương phản trên cả nền sáng lẫn nền tối. */
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: var(--color-sakura-300);
+    color: #241f1c;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility container-page {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 80rem;
+  padding-inline: 1rem;
+
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+
+  @media (width >= 64rem) {
+    padding-inline: 2rem;
+  }
+}
+
+/* Hoa văn asanoha nhạt dùng làm nền cho các dải section. */
+@utility bg-asanoha {
+  background-image: radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--color-ink) 9%, transparent) 1px, transparent 0);
+  background-size: 22px 22px;
+}
