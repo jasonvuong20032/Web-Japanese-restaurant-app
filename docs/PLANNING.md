@@ -91,6 +91,33 @@ Contracts/   DTO ra/vào + quy tắc kiểm tra dữ liệu tự thân
 Nguyên tắc: **Endpoint không chứa nghiệp vụ**, Service không biết gì về HTTP. Nhờ vậy đổi
 Minimal API sang Controller hay thêm gRPC sau này chỉ phải sửa một lớp.
 
+### 3.2 Kiến trúc khi deploy
+
+Ở môi trường chạy thật, frontend **không** được host riêng. Bản build của Vite được đặt vào
+`wwwroot` của API, và chính API phục vụ luôn các file tĩnh:
+
+```
+┌───────────────────────────────────────────┐
+│  SakuraTei.Api  (một process, một origin)  │
+│                                            │
+│   /api/*      → Endpoints → Services       │
+│   /health     → kiểm tra sống              │
+│   còn lại     → wwwroot/index.html (SPA)   │
+└───────────────────────────────────────────┘
+```
+
+Ba thứ được giải quyết cùng lúc nhờ cách này: không cần CORS (cùng origin), không cần cấu hình
+rewrite ở tầng web server, và không cần biến `VITE_API_BASE_URL` (đường dẫn `/api` mặc định đã đúng).
+
+Hai chi tiết dễ bỏ sót đã xử lý trong `Program.cs`:
+
+- Route `/` chuyển sang Swagger **chỉ đăng ký ở Development**. Để nguyên như cũ thì trang chủ của
+  bản production sẽ redirect sang Swagger thay vì mở SPA.
+- `/api` có fallback riêng trả **404 JSON**. Nếu để đường dẫn API sai rơi xuống fallback SPA,
+  client sẽ nhận HTML và `response.json()` vỡ bằng một lỗi không liên quan tới nguyên nhân thật.
+
+Chi tiết các bước và bẫy khi triển khai nằm ở [DEPLOY.md](DEPLOY.md).
+
 ---
 
 ## 4. Mô hình dữ liệu

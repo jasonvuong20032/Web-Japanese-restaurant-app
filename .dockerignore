@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+**/wwwroot/
+.git/
+.github/
+docs/
+*.md
+Dockerfile
+.dockerignore

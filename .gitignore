@@ -5,6 +5,10 @@ obj/
 *.suo
 .vs/
 
+# Frontend sau khi build duoc chep vao day cho ban deploy gop — la san pham build,
+# khong phai ma nguon.
+backend/SakuraTei.Api/wwwroot/
+
 # ---- Node ----
 node_modules/
 dist/

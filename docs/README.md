@@ -75,6 +75,16 @@ npm run typecheck   # kiểm tra kiểu
 npm run build       # dựng bản production vào dist/
 ```
 
+## Triển khai
+
+Bản deploy chạy gộp một process: frontend build xong được đặt vào `wwwroot` của API nên web và
+API cùng origin. Xem [DEPLOY.md](DEPLOY.md) để biết cách dựng bằng Docker hoặc chạy trực tiếp.
+
+```bash
+docker build -t sakura-tei .
+docker run -d -p 80:8080 sakura-tei
+```
+
 ## Giới hạn đã biết
 
 Đơn hàng và lượt đặt bàn chỉ nằm trong bộ nhớ tiến trình, nên **mất hết khi khởi động lại API**.

@@ -93,6 +93,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(CorsPolicy);
 
+// Bản deploy gộp: frontend đã build nằm trong wwwroot và do chính API này phục vụ,
+// nhờ vậy web với API cùng một origin — không phải mở CORS, không phải cấu hình
+// rewrite ở tầng web server. Lúc phát triển thì không có wwwroot (Vite lo phần web)
+// và hai middleware này chỉ nằm im.
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 var api = app.MapGroup("/api");
 api.MapMenuEndpoints();
 api.MapOrderEndpoints();
@@ -110,7 +117,22 @@ app.MapGet("/health", (IDishService dishes) => TypedResults.Ok(new
 .WithName("HealthCheck")
 .WithSummary("Kiểm tra API sống và đã nạp đủ thực đơn.");
 
-// Vào thẳng gốc thì chuyển sang Swagger cho tiện khi phát triển.
-app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();
+// Đường dẫn dưới /api mà không khớp endpoint nào phải trả 404 JSON. Nếu để nó rơi
+// xuống fallback SPA bên dưới thì client gọi sai endpoint sẽ nhận về HTML, và
+// response.json() phía frontend vỡ bằng một lỗi chẳng liên quan gì tới nguyên nhân thật.
+api.MapFallback(() => Results.NotFound(
+        new ProblemDetailsBody("Không tìm thấy", "Endpoint này không tồn tại.", 404)))
+    .ExcludeFromDescription();
+
+if (app.Environment.IsDevelopment())
+{
+    // Vào thẳng gốc thì chuyển sang Swagger cho tiện khi phát triển. Ở Production
+    // gốc phải là index.html của SPA nên không đăng ký route này.
+    app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();
+}
+
+// Mọi đường dẫn còn lại giao cho React Router. Không có dòng này thì khách F5 giữa
+// trang /thuc-don hoặc mở link được chia sẻ sẽ nhận 404 của máy chủ.
+app.MapFallbackToFile("index.html");
 
 app.Run();
