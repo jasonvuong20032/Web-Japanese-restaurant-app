@@ -1,0 +1,5 @@
+# Cloudflare Pages đọc file này (Vite chép nguyên từ public/ sang dist/).
+# File trong assets/ có mã băm trong tên nên đổi nội dung là đổi tên — cache vĩnh viễn được.
+# HTML thì Pages mặc định trả max-age=0 và tự xoá cache ở CDN mỗi lần deploy, không cần khai báo.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

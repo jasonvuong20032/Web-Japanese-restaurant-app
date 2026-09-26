@@ -79,6 +79,8 @@ npm run build       # dựng bản production vào dist/
 
 Bản deploy chạy gộp một process: frontend build xong được đặt vào `wwwroot` của API nên web và
 API cùng origin. Xem [DEPLOY.md](DEPLOY.md) để biết cách dựng bằng Docker hoặc chạy trực tiếp.
+Muốn đưa web lên CDN thì có hai bản tách đôi (API vẫn chạy trên Render):
+[DEPLOY-VERCEL.md](DEPLOY-VERCEL.md) và [DEPLOY-CLOUDFLARE.md](DEPLOY-CLOUDFLARE.md).
 
 ```bash
 docker build -t sakura-tei .

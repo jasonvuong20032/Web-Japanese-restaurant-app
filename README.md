@@ -29,3 +29,4 @@ npm run dev
 | [docs/PLANNING.md](docs/PLANNING.md) | Kế hoạch chi tiết: phạm vi, kiến trúc, mô hình dữ liệu, quy tắc nghiệp vụ, cách kiểm tra |
 | [docs/DEPLOY.md](docs/DEPLOY.md) | Triển khai lên server bằng Docker (kèm HTTPS tự động) hoặc chạy trực tiếp |
 | [docs/DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md) | Deploy tách đôi: frontend lên Vercel, API .NET lên Render |
+| [docs/DEPLOY-CLOUDFLARE.md](docs/DEPLOY-CLOUDFLARE.md) | Frontend lên Cloudflare Pages, API .NET lên Render, nối qua proxy nên không cần CORS |
