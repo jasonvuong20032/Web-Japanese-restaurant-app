@@ -2,7 +2,7 @@ using SakuraTei.Api.Models;
 
 namespace SakuraTei.Api.Data;
 
-/// <summary>Bảy nhóm món của Sakura Tei.</summary>
+/// <summary>Mười hai nhóm món của Sakura Tei.</summary>
 public static class SeedCategories
 {
     public static readonly IReadOnlyList<Category> All =
@@ -64,14 +64,69 @@ public static class SeedCategories
         },
         new Category
         {
+            Slug = "wagyu",
+            Name = "Bò Wagyu & Kobe",
+            NameJp = "和牛",
+            Kanji = "牛",
+            Description = "Bò Kobe, Matsusaka, Omi hạng A5 — steak, sukiyaki, shabu-shabu và sushi bò khò lửa.",
+            ImageUrl = DishPhotos.CategoryCovers["wagyu"],
+            AccentColor = "#7A2E2E",
+            DisplayOrder = 6,
+        },
+        new Category
+        {
+            Slug = "hai-san",
+            Name = "Hải sản cao cấp",
+            NameJp = "高級海鮮",
+            Kanji = "海",
+            Description = "Cua hoàng đế, tôm hùm Ise, bào ngư, nhím biển Hokkaido và cá quý từ chợ Toyosu.",
+            ImageUrl = DishPhotos.CategoryCovers["hai-san"],
+            AccentColor = "#1F5F7A",
+            DisplayOrder = 7,
+        },
+        new Category
+        {
+            Slug = "tempura",
+            Name = "Tempura & đồ chiên",
+            NameJp = "天ぷら・揚げ物",
+            Kanji = "揚",
+            Description = "Tempura vỏ mỏng như ren, tonkatsu, karaage, takoyaki và okonomiyaki nóng giòn.",
+            ImageUrl = DishPhotos.CategoryCovers["tempura"],
+            AccentColor = "#C08A2B",
+            DisplayOrder = 8,
+        },
+        new Category
+        {
+            Slug = "donburi",
+            Name = "Cơm & Donburi",
+            NameJp = "丼・ご飯",
+            Kanji = "丼",
+            Description = "Katsudon, oyakodon, gyudon, omurice và cơm nắm — no bụng, đậm vị, phục vụ nhanh.",
+            ImageUrl = DishPhotos.CategoryCovers["donburi"],
+            AccentColor = "#9C5B2E",
+            DisplayOrder = 9,
+        },
+        new Category
+        {
+            Slug = "mochi",
+            Name = "Mochi & Wagashi",
+            NameJp = "餅・和菓子",
+            Kanji = "餅",
+            Description = "Mochi giã tay mỗi sáng, daifuku trái cây, dango, yokan và wagashi dùng cùng matcha.",
+            ImageUrl = DishPhotos.CategoryCovers["mochi"],
+            AccentColor = "#C46B8A",
+            DisplayOrder = 10,
+        },
+        new Category
+        {
             Slug = "trang-mieng",
             Name = "Tráng miệng",
             NameJp = "デザート",
             Kanji = "甘",
-            Description = "Purin, mochi, dorayaki và kem — ngọt dịu kiểu Nhật, không gắt, ăn nhẹ sau bữa chính.",
+            Description = "Purin, bánh ngọt, dorayaki và kem — ngọt dịu kiểu Nhật, không gắt, ăn nhẹ sau bữa chính.",
             ImageUrl = "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=1200&q=80",
             AccentColor = "#E8A2AE",
-            DisplayOrder = 6,
+            DisplayOrder = 11,
         },
         new Category
         {
@@ -82,7 +137,7 @@ public static class SeedCategories
             Description = "Matcha Uji đánh bằng chasen, hojicha rang mộc, soda trái cây và trà lạnh ủ chậm.",
             ImageUrl = "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=1200&q=80",
             AccentColor = "#6F8F4F",
-            DisplayOrder = 7,
+            DisplayOrder = 12,
         },
     ];
 }

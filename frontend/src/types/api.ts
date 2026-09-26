@@ -46,8 +46,19 @@ export interface DishSummary {
   isAvailable: boolean
 }
 
+/** Một ảnh chi tiết của món, lấy từ Wikimedia Commons nên kèm ghi công tác giả. */
+export interface DishPhoto {
+  /** Bản 960px cho ảnh lớn. */
+  url: string
+  /** Bản 500px cho dải ảnh nhỏ. */
+  thumbUrl: string
+  credit: string
+  sourceUrl: string
+}
+
 export interface DishDetail extends DishSummary {
   nameRomaji: string
+  photos: DishPhoto[]
   categoryName: string
   longDescription: string
   ingredients: string[]

@@ -1,6 +1,6 @@
 # Sakura Tei — Website ẩm thực Nhật Bản
 
-Bài tập web full-stack: một website nhà hàng Nhật với thực đơn 120 món, đặt món giao tận nơi,
+Bài tập web full-stack: một website nhà hàng Nhật với thực đơn 250 món, đặt món giao tận nơi,
 đặt bàn trực tuyến và chuyên mục bài viết.
 
 - **Backend** — ASP.NET Core 9 Minimal API, dữ liệu nằm trong bộ nhớ (chưa gắn cơ sở dữ liệu).
@@ -30,7 +30,7 @@ Muốn trỏ sang backend khác thì đặt biến `VITE_API_TARGET` trước kh
 backend/SakuraTei.Api/
   Models/       Dish, Category, Order, Reservation, BlogPost
   Contracts/    DTO request/response + quy tắc kiểm tra dữ liệu
-  Data/         120 món và các bài viết dựng sẵn (Seed*)
+  Data/         250 món, ảnh từng món (DishPhotos) và các bài viết dựng sẵn (Seed*)
   Services/     Tra cứu thực đơn, tạo đơn, giữ chỗ đặt bàn
   Endpoints/    Khai báo route theo nhóm chức năng
 

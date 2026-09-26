@@ -154,7 +154,7 @@ public sealed class DishService : IDishService
         return new DishDetail(
             dish.Id, dish.Slug, dish.Name, dish.NameJp, dish.NameRomaji, dish.CategorySlug, categoryName,
             dish.Description, dish.LongDescription, dish.Price, dish.OriginalPrice, dish.ImageUrl,
-            dish.Tags, dish.Ingredients, dish.SpicyLevel, dish.Calories, dish.PrepMinutes,
+            dish.Photos, dish.Tags, dish.Ingredients, dish.SpicyLevel, dish.Calories, dish.PrepMinutes,
             dish.Rating, dish.ReviewCount, dish.IsFeatured, dish.IsAvailable, related);
     }
 

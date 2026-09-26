@@ -42,6 +42,7 @@ public sealed record DishDetail(
     decimal Price,
     decimal? OriginalPrice,
     string ImageUrl,
+    IReadOnlyList<DishPhoto> Photos,
     IReadOnlyList<string> Tags,
     IReadOnlyList<string> Ingredients,
     int SpicyLevel,

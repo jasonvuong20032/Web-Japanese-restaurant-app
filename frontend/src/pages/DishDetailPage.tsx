@@ -6,11 +6,11 @@ import { useAsync } from '@/hooks/useAsync'
 import { usePageTitle } from '@/hooks/usePageTitle'
 import { useCart } from '@/context/CartContext'
 import { DishCard } from '@/components/DishCard'
+import { DishGallery } from '@/components/DishGallery'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { ErrorState, Skeleton } from '@/components/ui/Feedback'
 import { QuantityStepper, Rating, SpicyMeter } from '@/components/ui/Meters'
-import { SmartImage } from '@/components/ui/SmartImage'
 
 const SPICY_LABELS = ['Không cay', 'Cay nhẹ', 'Cay vừa', 'Rất cay']
 
@@ -83,18 +83,16 @@ export function DishDetailPage() {
 
       <article className="container-page py-10 lg:py-14">
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
-          <div className="relative">
-            <SmartImage
-              src={item.imageUrl}
-              alt={item.name}
-              loading="eager"
-              className="aspect-4/3 rounded-card border border-line shadow-soft"
-            />
-            <div className="absolute top-4 left-4 flex flex-col items-start gap-2">
-              {item.isFeatured && <Badge tone="gold">Món nổi bật</Badge>}
-              {discount > 0 && <Badge tone="brand">Giảm {discount}%</Badge>}
-            </div>
-          </div>
+          <DishGallery
+            photos={item.photos.length > 0 ? item.photos : [{ url: item.imageUrl, thumbUrl: item.imageUrl, credit: '', sourceUrl: '' }]}
+            alt={item.name}
+            overlay={
+              <div className="absolute top-4 left-4 flex flex-col items-start gap-2">
+                {item.isFeatured && <Badge tone="gold">Món nổi bật</Badge>}
+                {discount > 0 && <Badge tone="brand">Giảm {discount}%</Badge>}
+              </div>
+            }
+          />
 
           <div>
             <p className="font-jp text-lg text-brand">{item.nameJp}</p>

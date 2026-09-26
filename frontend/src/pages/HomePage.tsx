@@ -33,7 +33,7 @@ const HIGHLIGHTS = [
 ]
 
 const STATS = [
-  { value: '120', label: 'món trong thực đơn' },
+  { value: '250', label: 'món trong thực đơn' },
   { value: '18h', label: 'ninh một nồi tonkotsu' },
   { value: '4.8★', label: 'điểm trung bình' },
 ]
@@ -94,7 +94,7 @@ export function HomePage() {
           ) : (
             <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {categories.isLoading
-                ? Array.from({ length: 7 }, (_, index) => (
+                ? Array.from({ length: 12 }, (_, index) => (
                     <div key={index} className="aspect-5/4 animate-pulse rounded-card bg-line-soft" />
                   ))
                 : categories.data?.map((category) => (
@@ -224,7 +224,7 @@ function Hero() {
           </h1>
 
           <p className="mt-5 max-w-lg text-lg text-ink-muted">
-            120 món sushi, sashimi, ramen, udon, BBQ than hoa, tráng miệng và trà Nhật. Đặt giao tận nơi
+            250 món sushi, sashimi, bò Kobe, hải sản cao cấp, ramen, tempura, mochi và trà Nhật. Đặt giao tận nơi
             trong 45 phút, hoặc giữ một chỗ bên quầy bếp mở.
           </p>
 

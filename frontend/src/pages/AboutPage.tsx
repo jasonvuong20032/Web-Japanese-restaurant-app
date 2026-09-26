@@ -22,8 +22,8 @@ const TIMELINE = [
   },
   {
     year: '2026',
-    title: '120 món trong thực đơn',
-    text: 'Bảy nhóm món, từ nigiri và sashimi tới BBQ than hoa, tráng miệng và trà Nhật.',
+    title: '250 món trong thực đơn',
+    text: 'Mười hai nhóm món, từ nigiri, bò Kobe và hải sản cao cấp tới mochi giã tay và trà Nhật.',
   },
 ]
 

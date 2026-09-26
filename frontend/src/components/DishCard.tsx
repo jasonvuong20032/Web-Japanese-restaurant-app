@@ -7,13 +7,18 @@ import { Badge } from '@/components/ui/Badge'
 import { Rating, SpicyMeter } from '@/components/ui/Meters'
 import { SmartImage } from '@/components/ui/SmartImage'
 
-/** Một chữ kanji đại diện cho mỗi nhóm, dùng làm ảnh dự phòng khi URL Unsplash lỗi. */
+/** Một chữ kanji đại diện cho mỗi nhóm, dùng làm ảnh dự phòng khi URL ảnh lỗi. */
 const CATEGORY_KANJI: Record<string, string> = {
   sushi: '寿',
   sashimi: '刺',
   ramen: '麺',
   udon: '饂',
   bbq: '焼',
+  wagyu: '牛',
+  'hai-san': '海',
+  tempura: '揚',
+  donburi: '丼',
+  mochi: '餅',
   'trang-mieng': '甘',
   'thuc-uong': '茶',
 }

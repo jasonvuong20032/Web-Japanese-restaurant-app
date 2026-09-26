@@ -43,7 +43,7 @@ Mở `http://<địa-chỉ-server>` là ra trang chủ. Kiểm tra nhanh:
 
 ```bash
 curl http://<địa-chỉ-server>/health
-# → {"status":"healthy","dishCount":120,"categoryCount":7,...}
+# → {"status":"healthy","dishCount":250,"categoryCount":12,...}
 ```
 
 `Dockerfile` dựng ba tầng: Node build frontend → SDK .NET publish backend kèm `wwwroot` →
@@ -139,7 +139,7 @@ S=http://<địa-chỉ-server>
 curl -s -o /dev/null -w "%{http_code}\n" $S/                      # 200
 curl -s -o /dev/null -w "%{http_code}\n" $S/thuc-don              # 200 (không được 404)
 curl -s -o /dev/null -w "%{http_code}\n" $S/mon-an/tonkotsu-ramen # 200
-curl -s $S/health                                                 # dishCount 120
+curl -s $S/health                                                 # dishCount 250
 curl -s $S/api/khong-ton-tai                                      # 404 kèm JSON, không phải HTML
 curl -s "$S/api/dishes?q=ca%20hoi" | head -c 80                   # totalItems phải khác 0
 ```

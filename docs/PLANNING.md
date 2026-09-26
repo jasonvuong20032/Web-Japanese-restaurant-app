@@ -21,7 +21,7 @@ Yêu cầu kỹ thuật: frontend và backend tách rời, giao tiếp qua REST 
 
 | Nhóm chức năng | Mô tả |
 | --- | --- |
-| Thực đơn | 120 món chia bảy nhóm, lọc theo nhóm/giá/độ cay/thẻ, tìm kiếm không dấu, phân trang |
+| Thực đơn | 250 món chia mười hai nhóm, lọc theo nhóm/giá/độ cay/thẻ, tìm kiếm không dấu, phân trang |
 | Chi tiết món | Mô tả dài, nguyên liệu, dinh dưỡng, đánh giá, gợi ý món cùng nhóm |
 | Giỏ hàng | Thêm/sửa/xoá, lưu qua các lần tải trang, tính phí giao và ngưỡng miễn phí |
 | Đặt món | Form thông tin người nhận, kiểm tra dữ liệu hai phía, sinh mã đơn, tra cứu lại |
@@ -124,7 +124,7 @@ Chi tiết các bước và bẫy khi triển khai nằm ở [DEPLOY.md](DEPLOY.
 
 ### 4.1 Thực đơn
 
-`Category` — bảy nhóm: `sushi`, `sashimi`, `ramen`, `udon`, `bbq`, `trang-mieng`, `thuc-uong`.
+`Category` — mười hai nhóm: `sushi`, `sashimi`, `ramen`, `udon`, `bbq`, `wagyu`, `hai-san`, `tempura`, `donburi`, `mochi`, `trang-mieng`, `thuc-uong`.
 Mỗi nhóm có một chữ **kanji đại diện**, dùng làm ảnh dự phòng ở frontend khi URL ảnh lỗi,
 và một mã màu `accentColor` để tô badge.
 
@@ -200,7 +200,7 @@ Trường `null` bị lược khỏi phản hồi — nên phía TypeScript khai
 | GET | `/api/posts/latest?take=` | `BlogPost[]` |
 | GET | `/api/posts/{slug}` | `BlogPost` · 404 |
 
-Thêm `GET /health` để kiểm tra API sống và đã nạp đủ 120 món.
+Thêm `GET /health` để kiểm tra API sống và đã nạp đủ 250 món.
 
 ### 6.2 Tham số lọc thực đơn
 
@@ -213,7 +213,7 @@ tham số này** khi ở chế độ mặc định, cho URL gọn.
 ### 6.3 Tìm kiếm không dấu
 
 `DishService` tính sẵn một chuỗi đã bỏ dấu cho mỗi món (tên, romaji, mô tả, thẻ, nguyên liệu)
-ngay lúc khởi tạo. Nhờ vậy gõ `ca hoi` vẫn ra `cá hồi`, và không phải bỏ dấu lại 120 lần mỗi request.
+ngay lúc khởi tạo. Nhờ vậy gõ `ca hoi` vẫn ra `cá hồi`, và không phải bỏ dấu lại 250 lần mỗi request.
 Chữ `đ/Đ` phải thay tay vì nó không phải là "d cộng dấu" trong Unicode.
 
 ### 6.4 Hình dạng lỗi
@@ -243,7 +243,7 @@ Lỗi ở dòng món (`Items[0].DishId`) không gắn được vào ô nào nên
 
 | Đường dẫn | Trang | Ghi chú |
 | --- | --- | --- |
-| `/` | Trang chủ | Hero, bảy nhóm, món nổi bật, ba bài mới |
+| `/` | Trang chủ | Hero, mười hai nhóm, món nổi bật, ba bài mới |
 | `/thuc-don` | Thực đơn | Bộ lọc đồng bộ query string |
 | `/mon-an/:slug` | Chi tiết món | Kèm món liên quan |
 | `/dat-mon` | Đặt món | Form + tóm tắt đơn |
@@ -308,8 +308,11 @@ khi không có kết quả.
 Đây là chủ ý để bài tập chạy được mà không cần cài cơ sở dữ liệu. Thông báo 404 của endpoint
 tra cứu đơn có nói rõ điều này cho người dùng.
 
-**Ảnh lấy từ Unsplash qua URL.** Không có ảnh nào nằm trong repo. Mất mạng thì ảnh không tải
-được — nên component `SmartImage` hiển thị chữ kanji của nhóm món làm ảnh dự phòng.
+**Ảnh món lấy từ Wikimedia Commons qua URL.** Không có ảnh nào nằm trong repo. Mỗi món có 1–3 ảnh
+riêng (`Data/DishPhotos.cs`), không ảnh nào dùng chung giữa hai món; trang chi tiết hiện bộ ảnh kèm
+tên tác giả và giấy phép theo yêu cầu của Creative Commons. Ảnh bìa bảy nhóm cũ và ảnh bài viết vẫn
+lấy từ Unsplash. Mất mạng thì ảnh không tải được — nên component `SmartImage` hiển thị chữ kanji
+của nhóm món làm ảnh dự phòng.
 
 **Chưa có kiểm thử tự động.** Phần kiểm tra hiện làm thủ công, xem mục 9.
 
@@ -329,7 +332,7 @@ npm run build        # tsc -b && vite build
 
 ```bash
 curl http://localhost:5187/health
-# → dishCount 120, categoryCount 7
+# → dishCount 250, categoryCount 12
 
 curl "http://localhost:5187/api/dishes?q=ca%20hoi"     # tìm không dấu
 curl -X POST http://localhost:5187/api/orders \
@@ -347,7 +350,7 @@ khi sửa về sau:
 
 | Trang | Cần thấy |
 | --- | --- |
-| `/` | Hero, 7 nhóm món, 8 món nổi bật, 3 bài viết |
+| `/` | Hero, 12 nhóm món, 8 món nổi bật, 3 bài viết |
 | `/thuc-don` | 12 thẻ món, sidebar lọc, phân trang, số món phù hợp |
 | `/mon-an/tonkotsu-ramen` | Tên món, nguyên liệu, món liên quan, nút thêm giỏ |
 | `/dat-ban` | 21 khung giờ từ 11:00 tới 21:00, số chỗ còn lại |
