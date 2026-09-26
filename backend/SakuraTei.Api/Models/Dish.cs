@@ -35,7 +35,11 @@ public sealed record Dish
     /// <summary>Giá gốc trước khuyến mãi; <c>null</c> nghĩa là không giảm giá.</summary>
     public decimal? OriginalPrice { get; init; }
 
+    /// <summary>Ảnh đại diện trên thẻ món — bản nhỏ của ảnh đầu tiên trong <see cref="Photos"/>.</summary>
     public required string ImageUrl { get; init; }
+
+    /// <summary>Bộ ảnh chi tiết hiển thị ở trang món; không ảnh nào dùng chung giữa hai món.</summary>
+    public IReadOnlyList<DishPhoto> Photos { get; init; } = [];
 
     public IReadOnlyList<string> Tags { get; init; } = [];
 

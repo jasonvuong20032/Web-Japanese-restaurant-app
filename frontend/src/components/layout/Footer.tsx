@@ -4,7 +4,7 @@ const COLUMNS = [
   {
     title: 'Khám phá',
     links: [
-      { to: '/thuc-don', label: 'Thực đơn 120 món' },
+      { to: '/thuc-don', label: 'Thực đơn 250 món' },
       { to: '/thuc-don?category=sushi', label: 'Sushi & Sashimi' },
       { to: '/thuc-don?category=ramen', label: 'Ramen & Udon' },
       { to: '/thuc-don?category=bbq', label: 'BBQ than hoa' },

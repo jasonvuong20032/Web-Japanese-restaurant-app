@@ -4,7 +4,7 @@ import { cn } from '@/lib/cn'
 interface SmartImageProps {
   src: string
   alt: string
-  /** Ký tự kanji hiện thay ảnh khi URL lỗi — mọi ảnh món đều lấy từ Unsplash nên chuyện này có xảy ra. */
+  /** Ký tự kanji hiện thay ảnh khi URL lỗi — ảnh món lấy từ Wikimedia Commons nên chuyện này có xảy ra. */
   fallback?: string
   className?: string
   imgClassName?: string

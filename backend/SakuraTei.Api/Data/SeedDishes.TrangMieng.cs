@@ -4,7 +4,7 @@ namespace SakuraTei.Api.Data;
 
 public static partial class SeedDishes
 {
-    /// <summary>Nhóm tráng miệng — 20 món gồm purin, mochi, dorayaki và kem.</summary>
+    /// <summary>Nhóm tráng miệng — 35 món gồm purin, bánh ngọt, dorayaki và kem.</summary>
     private static readonly IReadOnlyList<Dish> TrangMieng =
     [
         Make("trang-mieng", "purin-trung-co-dien", "Purin trứng cổ điển", "カスタードプリン", "Custard purin", 58000,
@@ -106,5 +106,80 @@ public static partial class SeedDishes
             "Cheesecake kiểu soufflé nướng cách thuỷ, nhẹ xốp như bông, lắc nhẹ là rung.",
             "Phô mai kem, Trứng gà, Sữa tươi, Bột mì, Chanh vàng",
             "Bán chạy, Ngọt dịu", 6, 286, 4.7, 428),
+
+        Make("trang-mieng", "castella-nagasaki", "Bánh bông lan Castella Nagasaki", "カステラ", "Castella", 68000,
+            "Bánh bông lan mật ong nướng khuôn gỗ theo công thức Nagasaki 400 năm, đáy có lớp đường hạt giòn.",
+            "Trứng gà, Mật ong, Bột mì, Đường zarame, Mizuame",
+            "Kinh điển, Đặc sản, Không sữa", 3, 248, 4.7, 236),
+
+        Make("trang-mieng", "roll-cake-matcha", "Bánh cuộn matcha", "抹茶ロールケーキ", "Matcha roll cake", 72000,
+            "Cốt bánh bông lan matcha mềm ẩm cuộn kem tươi Hokkaido và đậu đỏ nguyên hạt.",
+            "Bột matcha Uji, Kem tươi Hokkaido, Đậu đỏ, Trứng, Bột mì",
+            "Matcha, Bán chạy", 3, 262, 4.7, 312),
+
+        Make("trang-mieng", "souffle-pancake", "Pancake soufflé Nhật", "スフレパンケーキ", "Souffle pancake", 118000,
+            "Ba lớp pancake cao 4cm, rung rinh như mây, kèm kem tươi, bơ mật ong và dâu tây.",
+            "Trứng gà, Bột mì, Sữa tươi, Kem tươi, Mật ong, Dâu tây",
+            "Bán chạy, Trẻ em", 20, 486, 4.8, 382, isFeatured: true),
+
+        Make("trang-mieng", "crepe-harajuku", "Crepe cuộn kiểu Harajuku", "原宿クレープ", "Harajuku crepe", 88000,
+            "Vỏ crepe mỏng cuộn hình nón với kem tươi, dâu, chuối và sô-cô-la — món ăn vặt phố Takeshita.",
+            "Vỏ crepe, Kem tươi, Dâu tây, Chuối, Sô-cô-la",
+            "Trẻ em, Trái cây", 8, 420, 4.6, 214),
+
+        Make("trang-mieng", "tiramisu-matcha", "Tiramisu matcha", "抹茶ティラミス", "Matcha tiramisu", 85000,
+            "Bánh ladyfinger thấm trà matcha, xen kẽ kem mascarpone, rây bột matcha dày trên mặt.",
+            "Bột matcha, Mascarpone, Bánh ladyfinger, Kem tươi, Trứng",
+            "Matcha, Ngọt dịu", 4, 324, 4.7, 256),
+
+        Make("trang-mieng", "strawberry-shortcake", "Bánh kem dâu shortcake", "いちごのショートケーキ", "Strawberry shortcake", 82000,
+            "Bánh kem kinh điển của Nhật: cốt bông lan, kem tươi nhẹ và dâu tây Nhật ở giữa và trên mặt.",
+            "Dâu tây, Kem tươi, Bột mì, Trứng, Đường",
+            "Kinh điển, Bán chạy, Trái cây", 3, 298, 4.8, 348),
+
+        Make("trang-mieng", "mont-blanc-hat-de", "Mont Blanc hạt dẻ Nhật", "和栗モンブラン", "Waguri Mont Blanc", 98000,
+            "Kem hạt dẻ Nhật waguri bóp sợi mảnh phủ quanh nhân kem tươi và đế meringue giòn.",
+            "Hạt dẻ Nhật, Kem tươi, Meringue, Rượu rum",
+            "Theo mùa, Đặc sản", 4, 356, 4.8, 168),
+
+        Make("trang-mieng", "kem-sua-hokkaido", "Kem tươi sữa Hokkaido", "北海道ソフトクリーム", "Hokkaido soft cream", 55000,
+            "Kem soft-serve làm từ sữa bò Hokkaido 3.6% béo, vị sữa đậm và kết thúc thanh.",
+            "Sữa tươi Hokkaido, Kem tươi, Đường, Ốc quế",
+            "Trẻ em, Mùa hè, Giá tốt", 2, 218, 4.7, 296),
+
+        Make("trang-mieng", "kem-matcha-soft-serve", "Kem tươi matcha", "抹茶ソフトクリーム", "Matcha soft cream", 58000,
+            "Kem soft-serve pha matcha Uji hạng nhất, màu xanh đậm và đắng dịu, xoắn cao trên ốc quế.",
+            "Bột matcha Uji, Sữa tươi, Kem tươi, Ốc quế",
+            "Matcha, Mùa hè", 2, 226, 4.8, 274),
+
+        Make("trang-mieng", "taiyaki-kem", "Taiyaki kem hở miệng", "たい焼きパフェ", "Taiyaki ice cream", 72000,
+            "Bánh cá taiyaki nướng giòn mở miệng, nhồi kem matcha, đậu đỏ và bánh quy.",
+            "Vỏ taiyaki, Kem matcha, Đậu đỏ, Bánh quy, Sô-cô-la",
+            "Trẻ em, Matcha", 6, 342, 4.6, 186),
+
+        Make("trang-mieng", "melon-pan", "Bánh mì dưa lưới melon pan", "メロンパン", "Melon pan", 45000,
+            "Bánh mì ngọt phủ lớp vỏ bánh quy giòn kẻ ô như quả dưa lưới, nướng mới mỗi giờ.",
+            "Bột mì, Bơ, Trứng, Đường, Sữa",
+            "Giá tốt, Trẻ em", 2, 342, 4.5, 164),
+
+        Make("trang-mieng", "daigaku-imo", "Khoai lang mật daigaku imo", "大学芋", "Daigaku imo", 58000,
+            "Khoai lang Nhật chiên giòn áo mật đường bóng lưỡng, rắc mè đen — món ăn vặt của sinh viên.",
+            "Khoai lang Nhật, Đường, Nước tương, Mè đen",
+            "Thuần chay, Giá tốt, Giòn", 8, 298, 4.5, 118),
+
+        Make("trang-mieng", "sorbet-yuzu", "Sorbet yuzu", "柚子シャーベット", "Yuzu sorbet", 58000,
+            "Sorbet chanh yuzu Kochi chua thanh, thơm vỏ quýt, dọn trong vỏ yuzu đông lạnh.",
+            "Nước cốt yuzu, Vỏ yuzu, Đường, Nước khoáng",
+            "Thuần chay, Mùa hè, Thơm yuzu, Ít calo", 2, 118, 4.6, 142),
+
+        Make("trang-mieng", "fruit-sando", "Sandwich trái cây fruit sando", "フルーツサンド", "Fruit sando", 95000,
+            "Bánh mì sữa kẹp kem tươi với dâu, kiwi và xoài xếp chéo, cắt ra thấy hình hoa.",
+            "Bánh mì shokupan, Kem tươi, Dâu tây, Kiwi, Xoài",
+            "Trái cây, Theo mùa", 6, 356, 4.7, 204),
+
+        Make("trang-mieng", "honey-toast", "Honey toast Shibuya", "ハニートースト", "Honey toast", 125000,
+            "Nguyên khối bánh mì nướng bơ mật ong, khoét rỗng xếp lại, phủ kem vani và trái cây.",
+            "Bánh mì shokupan, Bơ, Mật ong, Kem vani, Trái cây, Kem tươi",
+            "Chia sẻ, Trẻ em", 15, 680, 4.6, 152),
     ];
 }

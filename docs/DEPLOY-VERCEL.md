@@ -52,7 +52,7 @@ Xong thì kiểm tra:
 
 ```bash
 curl https://sakura-api.onrender.com/health
-# → {"status":"healthy","dishCount":120,"categoryCount":7,...}
+# → {"status":"healthy","dishCount":250,"categoryCount":12,...}
 ```
 
 > Dockerfile dựng cả frontend vào `wwwroot`, nên URL Render này mở ra cũng thấy website đầy đủ.

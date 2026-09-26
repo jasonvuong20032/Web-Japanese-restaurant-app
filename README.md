@@ -1,6 +1,6 @@
 # Sakura Tei — Website ẩm thực Nhật Bản
 
-Bài tập web full-stack: website nhà hàng Nhật với thực đơn 120 món, đặt món giao tận nơi,
+Bài tập web full-stack: website nhà hàng Nhật với thực đơn 250 món, đặt món giao tận nơi,
 đặt bàn trực tuyến và chuyên mục bài viết.
 
 - **Backend** — ASP.NET Core 9 Minimal API, dữ liệu trong bộ nhớ.

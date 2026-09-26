@@ -202,9 +202,9 @@ public static class SeedPosts
 
                 Anh Takumi Sato làm ở một quán sushi tại Osaka 14 năm trước khi sang Việt Nam. Anh đặt một điều kiện duy nhất khi nhận lời: cá phải nhập trực tiếp, không qua trung gian. Chi phí đội lên 40% và chúng tôi lỗ suốt bốn tháng đầu. Nhưng từ tháng thứ năm, khách quay lại lần hai chiếm hơn một nửa.
 
-                ## Hôm nay: 120 món, vẫn một nguyên tắc
+                ## Hôm nay: 250 món, vẫn một nguyên tắc
 
-                Thực đơn giờ có 120 món trải trên bảy nhóm. Nhưng nguyên tắc từ quầy sáu ghế thì không đổi: nấu vừa đủ trong ngày, hết là nghỉ. Bạn sẽ thỉnh thoảng thấy một vài món bị đánh dấu hết hàng trên website vào buổi tối — đó không phải lỗi hệ thống.
+                Thực đơn giờ có 250 món trải trên mười hai nhóm. Nhưng nguyên tắc từ quầy sáu ghế thì không đổi: nấu vừa đủ trong ngày, hết là nghỉ. Bạn sẽ thỉnh thoảng thấy một vài món bị đánh dấu hết hàng trên website vào buổi tối — đó không phải lỗi hệ thống.
 
                 ## Cảm ơn
 
