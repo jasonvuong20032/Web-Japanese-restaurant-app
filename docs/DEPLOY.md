@@ -36,7 +36,7 @@ Dùng khi chạy thử trong mạng nội bộ, hoặc khi đã có sẵn revers
 
 ```bash
 docker build -t sakura-tei .
-docker run -d --name sakura-tei -p 80:8080 --restart unless-stopped sakura-tei
+docker run -d --name sakura-tei -p 80:8080 -v sakura-data:/app/App_Data --restart unless-stopped sakura-tei
 ```
 
 Mở `http://<địa-chỉ-server>` là ra trang chủ. Kiểm tra nhanh:
@@ -108,6 +108,7 @@ WantedBy=multi-user.target
 | `ASPNETCORE_ENVIRONMENT` | `Production` trong ảnh Docker | Để `Development` sẽ bật Swagger và cho `/` chuyển sang Swagger |
 | `ASPNETCORE_URLS` | `http://+:8080` trong ảnh Docker | Cổng lắng nghe |
 | `Cors__AllowedOrigins__0` | `http://localhost:5173` | **Chỉ cần khi tách domain.** Deploy gộp thì không dùng tới |
+| `ConnectionStrings__Sakura` | `Data Source=App_Data/sakuratei.db` | Đổi chỗ lưu file SQLite, ví dụ sang ổ đĩa gắn thêm. Đường dẫn tương đối tính từ thư mục ứng dụng |
 
 ## Ba cái bẫy cần biết
 
@@ -122,10 +123,13 @@ curl "http://<server>/api/dishes?q=ca%20hoi"
 # totalItems phải khác 0
 ```
 
-**2. Dữ liệu nằm trong RAM.** Đơn hàng và lượt đặt bàn mất sạch khi restart. Quan trọng hơn:
-**đừng chạy nhiều instance** hay bật autoscale — mỗi instance giữ một bộ dữ liệu riêng, khách
-tra mã đơn sẽ lúc thấy lúc không tuỳ request rơi vào instance nào. Muốn chạy nhiều instance thì
-phải gắn cơ sở dữ liệu trước (xem mục 10 của [PLANNING.md](PLANNING.md)).
+**2. Database là một file SQLite nằm cạnh ứng dụng.** API tự tạo `App_Data/sakuratei.db` lúc khởi
+động. Docker Compose (cách 1) đã gắn volume `app_data` nên dữ liệu còn qua các lần build lại;
+chạy `docker run` (cách 2) mà không có `-v sakura-data:/app/App_Data` thì mỗi container mới là một
+database mới. Chạy trực tiếp (cách 3) thì người dùng chạy dịch vụ phải có quyền ghi thư mục `App_Data`.
+**Đừng chạy nhiều instance** hay bật autoscale — mỗi instance một file database riêng, và khoá chống
+đặt trùng chỗ chỉ có tác dụng trong một process. Muốn chạy nhiều instance thì chuyển sang PostgreSQL
+trước (xem mục 10 của [PLANNING.md](PLANNING.md)).
 
 **3. Build lại frontend mỗi khi đổi domain — nếu tách riêng.** `VITE_API_BASE_URL` được nướng vào
 bundle **lúc build**, không đọc lúc chạy. Cách deploy gộp trong tài liệu này không đụng tới nó,
@@ -139,7 +143,7 @@ S=http://<địa-chỉ-server>
 curl -s -o /dev/null -w "%{http_code}\n" $S/                      # 200
 curl -s -o /dev/null -w "%{http_code}\n" $S/thuc-don              # 200 (không được 404)
 curl -s -o /dev/null -w "%{http_code}\n" $S/mon-an/tonkotsu-ramen # 200
-curl -s $S/health                                                 # dishCount 250
+curl -s $S/health                                                 # database SQLite, dishCount 250
 curl -s $S/api/khong-ton-tai                                      # 404 kèm JSON, không phải HTML
 curl -s "$S/api/dishes?q=ca%20hoi" | head -c 80                   # totalItems phải khác 0
 ```

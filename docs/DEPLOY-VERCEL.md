@@ -116,9 +116,11 @@ các URL này không nằm trong danh sách và mọi request API sẽ hỏng. B
 mất **khoảng 50 giây**, trong lúc đó trang sẽ hiện lỗi "Không kết nối được tới máy chủ".
 Nếu đưa link cho giảng viên chấm, hãy mở trước vài phút cho nó thức dậy.
 
-**4. Đơn hàng và đặt bàn vẫn nằm trong RAM.** Render restart dịch vụ (khi ngủ dậy, khi deploy)
-là mất sạch. Mã đơn vừa tạo tra lại có thể không còn. Đây là giới hạn đã biết của dự án, xem
-mục 10 của [PLANNING.md](PLANNING.md).
+**4. Database SQLite trên Render gói Free không bền.** Gói Free không có ổ đĩa lưu lâu dài: mỗi
+lần deploy lại, hoặc khi dịch vụ ngủ rồi thức dậy, file database được tạo lại từ dữ liệu mẫu và đơn
+hàng, lượt đặt bàn cũ mất. Trong một phiên đang chạy thì thêm/sửa/xoá vẫn lưu bình thường. Muốn giữ
+lâu dài thì gắn Render Disk (trả phí) vào `/app/App_Data` hoặc chuyển sang Supabase — xem mục 8 của
+[PLANNING.md](PLANNING.md).
 
 ---
 
