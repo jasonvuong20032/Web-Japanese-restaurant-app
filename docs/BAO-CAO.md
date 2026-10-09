@@ -648,9 +648,15 @@ Từng bước cấu hình, cách kiểm tra và bảng đọc lỗi: [DEPLOY-CL
 | `POST /api/orders` với dữ liệu sai | 400, kèm lỗi theo từng trường | Proxy chuyển POST đúng, kiểm tra dữ liệu hoạt động |
 | Header phản hồi `/api` | `server: cloudflare` + `x-render-origin-server: Kestrel` | Xác nhận đường đi Cloudflare → Render → ASP.NET Core |
 
-Sau khi Render build bản có database, `GET /health` trên Render trả thêm `"database":"SQLite"`.
+**Bản có database trên server thật** (Render build từ nhánh `main`, kiểm tra ngày 09/10/2026):
 
-**Bản có database** (chạy ở máy, chế độ Production giống trên Render, ngày 09/10/2026):
+| Kiểm tra | Kết quả |
+| --- | --- |
+| `GET /health` trên Render | `"database":"SQLite"`, 250 món, 12 nhóm, giờ máy chủ báo theo `+07:00` |
+| `PATCH` và `DELETE` gửi qua proxy Cloudflare | Tới đúng API mới (trả lỗi 404 tiếng Việt của API mới) |
+| `node scripts/api-e2e.mjs <địa chỉ Render> --allow-remote` | **21/21 đạt** — thêm, đọc, huỷ đơn; thêm, đọc, sửa, xoá đặt bàn trên database thật |
+
+**Bản có database chạy ở máy** (chế độ Production giống trên Render, ngày 09/10/2026):
 
 | Bộ kiểm thử | Kết quả |
 | --- | --- |
