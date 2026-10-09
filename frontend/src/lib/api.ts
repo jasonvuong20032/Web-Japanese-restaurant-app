@@ -3,7 +3,6 @@ import type {
   BlogPost,
   Category,
   CreateOrderRequest,
-  CreateReservationRequest,
   DishDetail,
   DishFilters,
   DishQuery,
@@ -11,6 +10,7 @@ import type {
   Order,
   PagedResult,
   Reservation,
+  ReservationRequest,
 } from '@/types/api'
 
 /** Dev dùng proxy của Vite (xem vite.config.ts); khi build có thể trỏ thẳng qua biến môi trường. */
@@ -147,14 +147,28 @@ export const api = {
   getOrder: (code: string, signal?: AbortSignal) =>
     request<Order>(`/orders/${encodeURIComponent(code)}`, { signal }),
 
+  /** Chỉ huỷ được khi bếp chưa nhận làm; trả về đơn với trạng thái mới. */
+  cancelOrder: (code: string) =>
+    request<Order>(`/orders/${encodeURIComponent(code)}/cancel`, { method: 'PATCH' }),
+
   getAvailability: (date: string, signal?: AbortSignal) =>
     request<Availability>(`/reservations/availability${toQueryString({ date })}`, { signal }),
 
-  createReservation: (payload: CreateReservationRequest) =>
+  createReservation: (payload: ReservationRequest) =>
     request<Reservation>('/reservations', { method: 'POST', body: JSON.stringify(payload) }),
 
   getReservation: (code: string, signal?: AbortSignal) =>
     request<Reservation>(`/reservations/${encodeURIComponent(code)}`, { signal }),
+
+  updateReservation: (code: string, payload: ReservationRequest) =>
+    request<Reservation>(`/reservations/${encodeURIComponent(code)}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    }),
+
+  /** Xoá hẳn lượt đặt; máy chủ trả 204 nên không có dữ liệu trả về. */
+  deleteReservation: (code: string) =>
+    request<void>(`/reservations/${encodeURIComponent(code)}`, { method: 'DELETE' }),
 
   getPosts: (params: { topic?: string; page?: number; pageSize?: number }, signal?: AbortSignal) =>
     request<PagedResult<BlogPost>>(`/posts${toQueryString(params)}`, { signal }),

@@ -3,6 +3,8 @@
 **/node_modules/
 **/dist/
 **/wwwroot/
+**/App_Data/
+**/*.db*
 .git/
 .github/
 docs/

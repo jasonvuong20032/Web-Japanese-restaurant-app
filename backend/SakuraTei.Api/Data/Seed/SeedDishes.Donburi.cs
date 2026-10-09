@@ -1,6 +1,6 @@
 using SakuraTei.Api.Models;
 
-namespace SakuraTei.Api.Data;
+namespace SakuraTei.Api.Data.Seed;
 
 public static partial class SeedDishes
 {

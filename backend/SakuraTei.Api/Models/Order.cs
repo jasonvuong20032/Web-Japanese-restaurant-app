@@ -3,7 +3,7 @@ namespace SakuraTei.Api.Models;
 /// <summary>Trạng thái vòng đời của một đơn hàng.</summary>
 public enum OrderStatus
 {
-    /// <summary>Vừa nhận, chờ bếp xác nhận.</summary>
+    /// <summary>Vừa nhận, chờ bếp xác nhận. Chỉ ở trạng thái này khách mới tự huỷ được.</summary>
     Received,
 
     /// <summary>Bếp đang chế biến.</summary>
@@ -19,8 +19,15 @@ public enum OrderStatus
     Cancelled,
 }
 
-/// <summary>Một dòng món trong đơn hàng, đã chốt giá tại thời điểm đặt.</summary>
-public sealed record OrderLine
+/// <summary>
+/// Một dòng món trong đơn hàng, đã chốt giá tại thời điểm đặt. Lưu ở bảng <c>OrderLines</c>
+/// và luôn được nạp kèm đơn hàng chứa nó.
+/// </summary>
+/// <remarks>
+/// Là class chứ không phải record: EF Core theo dõi thực thể theo tham chiếu, còn record so sánh
+/// theo giá trị nên hai dòng giống hệt nhau sẽ bị coi là một.
+/// </remarks>
+public sealed class OrderLine
 {
     public required string DishId { get; init; }
 
@@ -38,10 +45,10 @@ public sealed record OrderLine
     public decimal LineTotal => UnitPrice * Quantity;
 }
 
-/// <summary>Một đơn đặt món. Chỉ tồn tại trong bộ nhớ, mất khi khởi động lại API.</summary>
-public sealed record Order
+/// <summary>Một đơn đặt món, lưu ở bảng <c>Orders</c> trong SQLite.</summary>
+public sealed class Order
 {
-    /// <summary>Mã đơn dạng <c>ST-XXXXXX</c>, khách dùng để tra cứu.</summary>
+    /// <summary>Mã đơn dạng <c>ST-XXXXXX</c>, khách dùng để tra cứu. Là khoá chính.</summary>
     public required string Code { get; init; }
 
     public required string CustomerName { get; init; }
@@ -54,7 +61,7 @@ public sealed record Order
 
     public string? Note { get; init; }
 
-    public required IReadOnlyList<OrderLine> Lines { get; init; }
+    public required List<OrderLine> Lines { get; init; }
 
     /// <summary>Tổng tiền hàng trước phí giao.</summary>
     public required decimal Subtotal { get; init; }
@@ -63,7 +70,8 @@ public sealed record Order
 
     public decimal Total => Subtotal + DeliveryFee;
 
-    public OrderStatus Status { get; init; } = OrderStatus.Received;
+    /// <summary>Đổi được sau khi tạo — hiện chỉ có thao tác huỷ đơn đổi trạng thái.</summary>
+    public OrderStatus Status { get; set; } = OrderStatus.Received;
 
     public required DateTimeOffset CreatedAt { get; init; }
 

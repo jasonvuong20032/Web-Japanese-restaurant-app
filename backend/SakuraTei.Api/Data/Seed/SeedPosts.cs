@@ -1,6 +1,6 @@
 using SakuraTei.Api.Models;
 
-namespace SakuraTei.Api.Data;
+namespace SakuraTei.Api.Data.Seed;
 
 /// <summary>Bài viết chuyên mục "Câu chuyện ẩm thực".</summary>
 public static class SeedPosts

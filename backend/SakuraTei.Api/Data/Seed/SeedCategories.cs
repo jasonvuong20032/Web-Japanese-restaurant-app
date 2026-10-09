@@ -1,6 +1,6 @@
 using SakuraTei.Api.Models;
 
-namespace SakuraTei.Api.Data;
+namespace SakuraTei.Api.Data.Seed;
 
 /// <summary>Mười hai nhóm món của Sakura Tei.</summary>
 public static class SeedCategories

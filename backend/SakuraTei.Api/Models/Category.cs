@@ -1,7 +1,7 @@
 namespace SakuraTei.Api.Models;
 
 /// <summary>
-/// Nhóm món trong thực đơn: sushi, ramen, pudding, mochi, matcha.
+/// Nhóm món trong thực đơn (sushi, ramen, wagyu…), lưu ở bảng <c>Categories</c>.
 /// </summary>
 public sealed record Category
 {

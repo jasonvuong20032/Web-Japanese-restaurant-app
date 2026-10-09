@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { api } from '@/lib/api'
+import { BRAND } from '@/lib/brand'
 import { formatDate } from '@/lib/format'
 import { useAsync } from '@/hooks/useAsync'
 import { usePageTitle } from '@/hooks/usePageTitle'
@@ -122,7 +123,7 @@ export function BlogPostPage() {
           <p className="font-jp text-sm tracking-widest text-brand">お店で</p>
           <h2 className="mt-1 text-lg font-semibold text-ink">Muốn nếm thử ngay tại quán?</h2>
           <p className="mt-2 text-sm text-ink-muted">
-            Bếp mở cửa 11:00 – 22:00 mỗi ngày. Đặt bàn trước để ngồi quầy nhìn thẳng vào thớt của itamae.
+            Bếp mở cửa {BRAND.openingHours}. Đặt bàn trước để ngồi quầy nhìn thẳng vào thớt của itamae.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link to="/dat-ban" className="text-sm font-medium text-brand hover:underline">

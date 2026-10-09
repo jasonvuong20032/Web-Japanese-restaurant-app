@@ -1,8 +1,10 @@
 using System.Globalization;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using SakuraTei.Api.Common;
 using SakuraTei.Api.Contracts;
 using SakuraTei.Api.Data;
+using SakuraTei.Api.Data.Configurations;
 using SakuraTei.Api.Models;
 
 namespace SakuraTei.Api.Services;
@@ -28,8 +30,10 @@ public interface IDishService
 }
 
 /// <summary>
-/// Đọc thực đơn từ dữ liệu tĩnh trong bộ nhớ. Đăng ký singleton vì dữ liệu không đổi
-/// trong suốt vòng đời ứng dụng.
+/// Thực đơn đọc từ bảng <c>Categories</c> và <c>Dishes</c> một lần khi service được tạo, rồi giữ
+/// trong bộ nhớ. 250 món đủ nhỏ để làm vậy, và chỉ lọc trong bộ nhớ mới so khớp không dấu được
+/// ("ca hoi" ra "cá hồi") — việc SQLite không tự làm. Sửa thực đơn thẳng trong database thì
+/// khởi động lại API để thấy thay đổi.
 /// </summary>
 public sealed class DishService : IDishService
 {
@@ -37,16 +41,22 @@ public sealed class DishService : IDishService
 
     private const int MaxPageSize = 60;
 
-    private readonly IReadOnlyList<Dish> _dishes = SeedDishes.All;
-    private readonly IReadOnlyList<Category> _categories = SeedCategories.All;
+    private readonly IReadOnlyList<Dish> _dishes;
+    private readonly IReadOnlyList<Category> _categories;
     private readonly Dictionary<string, Dish> _byId;
     private readonly Dictionary<string, Dish> _bySlug;
 
     /// <summary>Chuỗi tìm kiếm đã bỏ dấu của từng món, tính sẵn một lần để lọc cho nhanh.</summary>
     private readonly Dictionary<string, string> _searchIndex;
 
-    public DishService()
+    public DishService(IDbContextFactory<SakuraDbContext> dbFactory)
     {
+        using (var db = dbFactory.CreateDbContext())
+        {
+            _categories = [.. db.Categories.AsNoTracking().OrderBy(c => c.DisplayOrder)];
+            _dishes = [.. db.Dishes.AsNoTracking().OrderBy(d => EF.Property<int>(d, DishConfiguration.DisplayOrder))];
+        }
+
         _byId = _dishes.ToDictionary(d => d.Id, StringComparer.OrdinalIgnoreCase);
         _bySlug = _dishes.ToDictionary(d => d.Slug, StringComparer.OrdinalIgnoreCase);
         _searchIndex = _dishes.ToDictionary(

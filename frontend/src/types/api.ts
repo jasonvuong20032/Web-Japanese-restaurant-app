@@ -127,7 +127,8 @@ export interface Order {
   estimatedReadyAt: string
 }
 
-export interface CreateReservationRequest {
+/** Dùng chung cho đặt bàn mới (POST) và đổi lịch (PUT) — đổi lịch là gửi lại toàn bộ thông tin. */
+export interface ReservationRequest {
   customerName: string
   phone: string
   email?: string
@@ -149,6 +150,8 @@ export interface Reservation {
   partySize: number
   note?: string
   createdAt: string
+  /** Chỉ có sau khi khách đổi lịch ít nhất một lần. */
+  updatedAt?: string
 }
 
 export interface TimeSlot {

@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Diagnostics;
 using SakuraTei.Api.Common;
+using SakuraTei.Api.Data;
 using SakuraTei.Api.Endpoints;
 using SakuraTei.Api.Services;
 
@@ -11,8 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Dịch vụ
 // ---------------------------------------------------------------------------
 
-// Thực đơn và bài viết là dữ liệu tĩnh; đơn hàng và đặt bàn giữ trong bộ nhớ tiến trình.
-// Cả bốn đều singleton để trạng thái không mất giữa các request.
+// Toàn bộ dữ liệu nằm trong một file SQLite (mặc định App_Data/sakuratei.db).
+builder.Services.AddSakuraDatabase(builder.Configuration, builder.Environment);
+
+// Thực đơn và bài viết đọc từ database một lần rồi giữ trong bộ nhớ; đơn hàng và đặt bàn
+// đọc/ghi database ở mỗi request. Cả bốn đều singleton, mỗi thao tác tự mở một DbContext.
 builder.Services.AddSingleton<IDishService, DishService>();
 builder.Services.AddSingleton<IBlogService, BlogService>();
 builder.Services.AddSingleton<IOrderService, OrderService>();
@@ -36,7 +40,7 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1",
         Description =
             "API thực đơn, đặt món và đặt bàn cho website ẩm thực Nhật Sakura Tei. "
-            + "Bản này lưu dữ liệu trong bộ nhớ, chưa gắn cơ sở dữ liệu.",
+            + "Dữ liệu lưu trong SQLite qua Entity Framework Core.",
     });
 
     var xmlPath = Path.Combine(AppContext.BaseDirectory, "SakuraTei.Api.xml");
@@ -56,6 +60,9 @@ builder.Services.AddCors(options => options.AddPolicy(CorsPolicy, policy => poli
     .AllowAnyMethod()));
 
 var app = builder.Build();
+
+// Tạo bảng và nạp dữ liệu mẫu trước khi nhận request đầu tiên.
+await app.InitializeDatabaseAsync();
 
 // ---------------------------------------------------------------------------
 // Pipeline
@@ -110,9 +117,10 @@ app.MapGet("/health", (IDishService dishes) => TypedResults.Ok(new
 {
     Status = "healthy",
     Service = "Sakura Tei API",
+    Database = "SQLite",
     DishCount = dishes.Search(new() { PageSize = 1 }).TotalItems,
     CategoryCount = dishes.GetCategories().Count,
-    ServerTime = DateTimeOffset.Now,
+    ServerTime = VietnamTime.Now,
 }))
 .WithName("HealthCheck")
 .WithSummary("Kiểm tra API sống và đã nạp đủ thực đơn.");

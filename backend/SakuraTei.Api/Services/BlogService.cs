@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SakuraTei.Api.Common;
 using SakuraTei.Api.Data;
 using SakuraTei.Api.Models;
@@ -10,17 +11,26 @@ public interface IBlogService
 
     BlogPost? GetBySlug(string slug);
 
-    /// <summary>Các bài mới nhất, dùng cho dải "Câu chuyện ẩm thực" ở trang chủ.</summary>
     IReadOnlyList<BlogPost> GetLatest(int take);
 
     IReadOnlyList<string> GetTopics();
 }
 
-/// <summary>Đọc bài viết từ dữ liệu tĩnh trong bộ nhớ.</summary>
+/// <summary>
+/// Bài viết đọc từ bảng <c>Posts</c> một lần khi service được tạo — chỉ vài bài và ít khi đổi,
+/// nên giữ trong bộ nhớ thay vì hỏi database mỗi lần.
+/// </summary>
 public sealed class BlogService : IBlogService
 {
-    private readonly IReadOnlyList<BlogPost> _posts =
-        [.. SeedPosts.All.OrderByDescending(p => p.PublishedAt)];
+    private readonly IReadOnlyList<BlogPost> _posts;
+
+    public BlogService(IDbContextFactory<SakuraDbContext> dbFactory)
+    {
+        using var db = dbFactory.CreateDbContext();
+
+        // Sắp xếp phía ứng dụng: SQLite lưu ngày dạng chuỗi, không nên phó mặc thứ tự cho nó.
+        _posts = [.. db.Posts.AsNoTracking().AsEnumerable().OrderByDescending(p => p.PublishedAt)];
+    }
 
     public PagedResult<BlogPost> GetPosts(string? topic, int page, int pageSize)
     {

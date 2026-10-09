@@ -2,8 +2,11 @@ using SakuraTei.Api.Models;
 
 namespace SakuraTei.Api.Contracts;
 
-/// <summary>Yêu cầu đặt bàn.</summary>
-public sealed record CreateReservationRequest(
+/// <summary>
+/// Thông tin một lượt đặt bàn. Dùng chung cho đặt mới (<c>POST</c>) và đổi lịch (<c>PUT</c>):
+/// đổi lịch là gửi lại toàn bộ thông tin, nên hai thao tác có cùng quy tắc kiểm tra.
+/// </summary>
+public sealed record ReservationRequest(
     string? CustomerName,
     string? Phone,
     string? Email,
@@ -90,7 +93,8 @@ public sealed record ReservationResponse(
     string Time,
     int PartySize,
     string? Note,
-    DateTimeOffset CreatedAt)
+    DateTimeOffset CreatedAt,
+    DateTimeOffset? UpdatedAt)
 {
     public static ReservationResponse From(Reservation r) => new(
         r.Code,
@@ -101,7 +105,8 @@ public sealed record ReservationResponse(
         r.Time.ToString("HH:mm"),
         r.PartySize,
         r.Note,
-        r.CreatedAt);
+        r.CreatedAt,
+        r.UpdatedAt);
 }
 
 /// <summary>Bảng khung giờ của một ngày.</summary>

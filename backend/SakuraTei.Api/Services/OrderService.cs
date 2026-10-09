@@ -1,44 +1,39 @@
-using System.Collections.Concurrent;
-using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
+using SakuraTei.Api.Common;
 using SakuraTei.Api.Contracts;
+using SakuraTei.Api.Data;
 using SakuraTei.Api.Models;
 
 namespace SakuraTei.Api.Services;
 
-/// <summary>Kết quả tạo đơn: hoặc thành công, hoặc kèm danh sách lỗi theo trường.</summary>
-/// <param name="Order">Đơn đã tạo, <c>null</c> khi thất bại.</param>
-/// <param name="Errors">Lỗi nghiệp vụ, rỗng khi thành công.</param>
-public sealed record CreateOrderResult(Order? Order, IReadOnlyList<(string Field, string Message)> Errors)
-{
-    public bool Succeeded => Order is not null;
-}
-
 public interface IOrderService
 {
-    CreateOrderResult Create(CreateOrderRequest request);
+    /// <summary>Thêm đơn mới; giá lấy từ thực đơn chứ không lấy từ client.</summary>
+    ServiceResult<Order> Create(CreateOrderRequest request);
 
     Order? FindByCode(string code);
+
+    /// <summary>Huỷ đơn khi bếp chưa nhận làm — đổi trạng thái sang <see cref="OrderStatus.Cancelled"/>.</summary>
+    ServiceResult<Order> Cancel(string code);
 }
 
-/// <summary>
-/// Giữ đơn hàng trong bộ nhớ tiến trình. Dữ liệu mất khi khởi động lại API — đúng phạm vi
-/// bản này (chưa gắn cơ sở dữ liệu). Khi thay bằng EF Core, chỉ cần thay lớp cài đặt.
-/// </summary>
-public sealed class OrderService(IDishService dishService, ILogger<OrderService> logger) : IOrderService
+/// <summary>Đơn hàng lưu trong bảng <c>Orders</c>, các dòng món trong bảng <c>OrderLines</c>.</summary>
+public sealed class OrderService(
+    IDbContextFactory<SakuraDbContext> dbFactory,
+    IDishService dishService,
+    ILogger<OrderService> logger) : IOrderService
 {
     /// <summary>Phí giao cố định; miễn phí khi đơn đạt <see cref="FreeDeliveryThreshold"/>.</summary>
     private const decimal DeliveryFee = 25_000m;
 
     private const decimal FreeDeliveryThreshold = 500_000m;
 
-    private readonly ConcurrentDictionary<string, Order> _orders = new(StringComparer.OrdinalIgnoreCase);
-
-    public CreateOrderResult Create(CreateOrderRequest request)
+    public ServiceResult<Order> Create(CreateOrderRequest request)
     {
         var errors = request.Validate();
         if (errors.Count > 0)
         {
-            return new CreateOrderResult(null, errors);
+            return ServiceResult<Order>.Invalid(errors);
         }
 
         // Đã qua Validate nên Items chắc chắn khác null và không rỗng.
@@ -76,15 +71,17 @@ public sealed class OrderService(IDishService dishService, ILogger<OrderService>
 
         if (errors.Count > 0)
         {
-            return new CreateOrderResult(null, errors);
+            return ServiceResult<Order>.Invalid(errors);
         }
 
+        using var db = dbFactory.CreateDbContext();
+
         var subtotal = lines.Sum(l => l.LineTotal);
-        var now = DateTimeOffset.Now;
+        var now = VietnamTime.Now;
 
         var order = new Order
         {
-            Code = GenerateCode("ST"),
+            Code = BookingCode.NewUnique("ST", code => db.Orders.Any(o => o.Code == code)),
             CustomerName = request.CustomerName!.Trim(),
             Phone = request.Phone!.Trim(),
             Email = string.IsNullOrWhiteSpace(request.Email) ? null : request.Email.Trim(),
@@ -98,31 +95,55 @@ public sealed class OrderService(IDishService dishService, ILogger<OrderService>
             EstimatedReadyAt = now.AddMinutes(lines.Max(l => GetPrepMinutes(l.DishId)) + 20),
         };
 
-        _orders[order.Code] = order;
+        // Đơn và các dòng món được ghi trong cùng một transaction.
+        db.Orders.Add(order);
+        db.SaveChanges();
+
         logger.LogInformation(
             "Đơn hàng mới {OrderCode}: {LineCount} món, tổng {Total:N0}đ",
             order.Code, lines.Count, order.Total);
 
-        return new CreateOrderResult(order, []);
+        return ServiceResult<Order>.Ok(order);
     }
 
-    public Order? FindByCode(string code) => _orders.GetValueOrDefault(code);
-
-    private int GetPrepMinutes(string dishId) => dishService.FindById(dishId)?.PrepMinutes ?? 15;
-
-    /// <summary>
-    /// Sinh mã dạng <c>ST-A3F9K2</c>. Dùng bảng ký tự đã bỏ 0/O/1/I để khách đọc qua điện thoại không nhầm.
-    /// </summary>
-    internal static string GenerateCode(string prefix)
+    public Order? FindByCode(string code)
     {
-        const string alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-        var chars = new char[6];
+        using var db = dbFactory.CreateDbContext();
+        var normalized = BookingCode.Normalize(code);
 
-        for (var i = 0; i < chars.Length; i++)
+        // Dòng món là kiểu "owned" nên tự được nạp kèm, không cần Include.
+        return db.Orders.AsNoTracking().FirstOrDefault(o => o.Code == normalized);
+    }
+
+    public ServiceResult<Order> Cancel(string code)
+    {
+        using var db = dbFactory.CreateDbContext();
+        var normalized = BookingCode.Normalize(code);
+
+        var order = db.Orders.FirstOrDefault(o => o.Code == normalized);
+        if (order is null)
         {
-            chars[i] = alphabet[RandomNumberGenerator.GetInt32(alphabet.Length)];
+            return ServiceResult<Order>.NotFound($"Không có đơn hàng nào mang mã '{code}'.");
         }
 
-        return $"{prefix}-{new string(chars)}";
+        if (order.Status == OrderStatus.Cancelled)
+        {
+            return ServiceResult<Order>.Conflict("Đơn hàng này đã được huỷ trước đó.");
+        }
+
+        if (order.Status != OrderStatus.Received)
+        {
+            return ServiceResult<Order>.Conflict(
+                "Bếp đã bắt đầu làm món nên không huỷ trên website được nữa. Vui lòng gọi 1900 6868.");
+        }
+
+        order.Status = OrderStatus.Cancelled;
+        db.SaveChanges();
+
+        logger.LogInformation("Huỷ đơn hàng {OrderCode}", order.Code);
+
+        return ServiceResult<Order>.Ok(order);
     }
+
+    private int GetPrepMinutes(string dishId) => dishService.FindById(dishId)?.PrepMinutes ?? 15;
 }

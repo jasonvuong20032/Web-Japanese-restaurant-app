@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
 import { api } from '@/lib/api'
+import { BRAND } from '@/lib/brand'
 import { useAsync } from '@/hooks/useAsync'
 import { usePageTitle } from '@/hooks/usePageTitle'
 import { formatDate } from '@/lib/format'
 import { DishCard } from '@/components/DishCard'
-import { Button, LinkButton } from '@/components/ui/Button'
+import { AnchorButton, LinkButton } from '@/components/ui/Button'
 import { DishCardSkeleton, ErrorState } from '@/components/ui/Feedback'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { SmartImage } from '@/components/ui/SmartImage'
@@ -76,7 +77,7 @@ export function HomePage() {
         <div className="container-page">
           <SectionHeading
             eyebrow="メニュー"
-            title="Bảy nhóm món"
+            title="Mười hai nhóm món"
             description="Từ nigiri nắm tay tới nồi ramen bốc khói và ly matcha đánh tay."
             action={
               <LinkButton to="/thuc-don" variant="secondary" size="sm">
@@ -286,11 +287,14 @@ function ReservationBanner() {
           <LinkButton to="/dat-ban" size="lg" className="bg-white text-ai-800 hover:bg-sakura-100">
             Đặt bàn ngay
           </LinkButton>
-          <a href="tel:19006868">
-            <Button variant="ghost" size="lg" className="text-white hover:bg-white/10 hover:text-white">
-              Gọi 1900 6868
-            </Button>
-          </a>
+          <AnchorButton
+            href={BRAND.hotlineHref}
+            variant="ghost"
+            size="lg"
+            className="text-white hover:bg-white/10 hover:text-white"
+          >
+            Gọi {BRAND.hotline}
+          </AnchorButton>
         </div>
       </div>
     </section>

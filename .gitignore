@@ -9,10 +9,20 @@ obj/
 # khong phai ma nguon.
 backend/SakuraTei.Api/wwwroot/
 
+# ---- SQLite ----
+# API tu tao database va nap du lieu mau luc khoi dong, nen khong dua file .db len Git.
+backend/SakuraTei.Api/App_Data/
+*.db
+*.db-shm
+*.db-wal
+
 # ---- Node ----
 node_modules/
 dist/
 *.local
+
+# ---- Cloudflare (wrangler pages dev) ----
+.wrangler/
 
 # ---- Logs ----
 *.log

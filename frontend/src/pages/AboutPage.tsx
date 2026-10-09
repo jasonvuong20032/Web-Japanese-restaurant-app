@@ -1,5 +1,6 @@
+import { BRAND } from '@/lib/brand'
 import { usePageTitle } from '@/hooks/usePageTitle'
-import { LinkButton } from '@/components/ui/Button'
+import { AnchorButton, LinkButton } from '@/components/ui/Button'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { SmartImage } from '@/components/ui/SmartImage'
@@ -145,28 +146,28 @@ export function AboutPage() {
             <dl className="mt-6 space-y-4 text-sm">
               <div>
                 <dt className="font-medium text-ink">Địa chỉ</dt>
-                <dd className="mt-1 text-ink-muted">128 Lê Lợi, Phường Bến Thành, Quận 1, TP. Hồ Chí Minh</dd>
+                <dd className="mt-1 text-ink-muted">{BRAND.address}</dd>
               </div>
               <div>
                 <dt className="font-medium text-ink">Hotline</dt>
                 <dd className="mt-1">
-                  <a href="tel:19006868" className="text-brand hover:underline">
-                    1900 6868
+                  <a href={BRAND.hotlineHref} className="text-brand hover:underline">
+                    {BRAND.hotline}
                   </a>
                 </dd>
               </div>
               <div>
                 <dt className="font-medium text-ink">Email</dt>
                 <dd className="mt-1">
-                  <a href="mailto:xinchao@sakuratei.vn" className="text-brand hover:underline">
-                    xinchao@sakuratei.vn
+                  <a href={BRAND.emailHref} className="text-brand hover:underline">
+                    {BRAND.email}
                   </a>
                 </dd>
               </div>
               <div>
                 <dt className="font-medium text-ink">Giờ mở cửa</dt>
                 <dd className="mt-1 text-ink-muted">
-                  11:00 – 22:00 mỗi ngày · nhận đặt bàn tới 21:00
+                  {BRAND.openingHours} · nhận đặt bàn tới {BRAND.lastSeating}
                 </dd>
               </div>
             </dl>
@@ -183,6 +184,30 @@ export function AboutPage() {
               Đặt bàn trực tuyến
             </LinkButton>
           </div>
+        </div>
+      </section>
+
+      <section className="container-page py-14">
+        <SectionHeading
+          eyebrow="地図"
+          title="Đường tới quán"
+          description={`${BRAND.address}. Quán nằm trên trục Lê Lợi, đi bộ vài phút là tới chợ Bến Thành.`}
+          action={
+            <AnchorButton href={BRAND.mapLinkUrl} target="_blank" rel="noreferrer" variant="secondary" size="sm">
+              Mở trong Google Maps ↗
+            </AnchorButton>
+          }
+        />
+
+        <div className="mt-8 overflow-hidden rounded-card border border-line bg-sunken">
+          <iframe
+            title={`Bản đồ Google Maps: ${BRAND.name}, ${BRAND.address}`}
+            src={BRAND.mapEmbedUrl}
+            className="block aspect-4/3 w-full sm:aspect-video lg:aspect-21/9"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
         </div>
       </section>
     </>

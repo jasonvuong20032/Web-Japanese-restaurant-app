@@ -1,10 +1,10 @@
 using SakuraTei.Api.Models;
 
-namespace SakuraTei.Api.Data;
+namespace SakuraTei.Api.Data.Seed;
 
 /// <summary>
-/// Toàn bộ 250 món của thực đơn, dựng sẵn trong bộ nhớ khi khởi động.
-/// Mỗi nhóm món nằm ở một file <c>SeedDishes.&lt;Nhóm&gt;.cs</c> cho dễ đọc.
+/// Toàn bộ 250 món của thực đơn — dữ liệu mẫu nạp vào SQLite ở lần chạy đầu tiên
+/// (xem <c>DatabaseSetup</c>). Mỗi nhóm món nằm ở một file <c>SeedDishes.&lt;Nhóm&gt;.cs</c> cho dễ đọc.
 /// </summary>
 public static partial class SeedDishes
 {

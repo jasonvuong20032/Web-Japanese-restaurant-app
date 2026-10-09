@@ -1,6 +1,6 @@
 using SakuraTei.Api.Models;
 
-namespace SakuraTei.Api.Data;
+namespace SakuraTei.Api.Data.Seed;
 
 /// <summary>
 /// Ảnh riêng của từng món, lấy từ Wikimedia Commons (giấy phép Creative Commons / public domain).

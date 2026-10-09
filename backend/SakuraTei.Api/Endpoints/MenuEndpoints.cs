@@ -12,7 +12,7 @@ public static class MenuEndpoints
     {
         group.MapGet("/categories", (IDishService dishes) => TypedResults.Ok(dishes.GetCategories()))
             .WithName("GetCategories")
-            .WithSummary("Danh sách bảy nhóm món, kèm số món trong từng nhóm.");
+            .WithSummary("Danh sách mười hai nhóm món, kèm số món trong từng nhóm.");
 
         group.MapGet("/dishes", ([AsParameters] DishQuery query, IDishService dishes) =>
                 TypedResults.Ok(dishes.Search(query)))

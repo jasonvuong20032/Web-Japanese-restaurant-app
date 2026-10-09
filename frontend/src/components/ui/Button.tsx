@@ -48,3 +48,18 @@ export function LinkButton({ variant = 'primary', size = 'md', className, childr
     </Link>
   )
 }
+
+type AnchorButtonProps = CommonProps & { href: string } & Omit<ComponentPropsWithoutRef<'a'>, 'href' | 'className'>
+
+/**
+ * Liên kết ra ngoài website (`tel:`, `mailto:`, Google Maps…) nhưng trông như nút.
+ * Đừng bọc `<Button>` trong `<a>`: lồng phần tử tương tác vào nhau là HTML sai, và trình đọc
+ * màn hình sẽ đọc thành hai thứ bấm được.
+ */
+export function AnchorButton({ variant = 'primary', size = 'md', className, children, href, ...props }: AnchorButtonProps) {
+  return (
+    <a href={href} className={cn(base, variants[variant], sizes[size], className)} {...props}>
+      {children}
+    </a>
+  )
+}

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { BRAND } from '@/lib/brand'
 import { cn } from '@/lib/cn'
 import { useCart } from '@/context/CartContext'
 import { useTheme } from '@/context/ThemeContext'
+import { BrandLogo } from '@/components/layout/BrandLogo'
 
 const NAV_LINKS = [
   { to: '/', label: 'Trang chủ' },
@@ -49,12 +51,8 @@ export function Header() {
       )}
     >
       <div className="container-page flex h-16 items-center gap-4 lg:h-20">
-        <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label="Sakura Tei — trang chủ">
-          <img src="/sakura.svg" alt="" className="size-8" />
-          <span className="flex flex-col leading-none">
-            <span className="text-lg font-semibold tracking-tight text-ink">Sakura Tei</span>
-            <span className="font-jp text-[10px] tracking-[0.25em] text-ink-muted">さくら亭</span>
-          </span>
+        <Link to="/" className="shrink-0" aria-label={`${BRAND.name} — trang chủ`}>
+          <BrandLogo />
         </Link>
 
         <nav className="ml-4 hidden items-center gap-1 lg:flex">

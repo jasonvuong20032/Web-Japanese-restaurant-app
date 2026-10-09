@@ -36,6 +36,26 @@ public static class ApiResults
     /// <summary>Trả 404 với thông điệp tiếng Việt thống nhất.</summary>
     public static NotFound<ProblemDetailsBody> NotFound(string message) =>
         TypedResults.NotFound(new ProblemDetailsBody("Không tìm thấy", message, 404));
+
+    /// <summary>Trả 409 khi yêu cầu hợp lệ nhưng trạng thái hiện tại không cho làm, ví dụ huỷ đơn đã huỷ.</summary>
+    public static Conflict<ProblemDetailsBody> Conflict(string message) =>
+        TypedResults.Conflict(new ProblemDetailsBody("Không thực hiện được", message, 409));
+
+    /// <summary>
+    /// Đổi kết quả của service sang phản hồi HTTP. Mọi endpoint ghi dữ liệu đi qua đây nên
+    /// 400 / 404 / 409 luôn cùng một hình dạng, và frontend chỉ cần một cách đọc lỗi.
+    /// </summary>
+    /// <param name="result">Kết quả từ service.</param>
+    /// <param name="onSuccess">Dựng phản hồi khi thành công, ví dụ 201 kèm <c>Location</c>.</param>
+    public static IResult ToHttpResult<T>(this ServiceResult<T> result, Func<T, IResult> onSuccess) =>
+        result.Outcome switch
+        {
+            ServiceOutcome.Success => onSuccess(result.Value!),
+            ServiceOutcome.NotFound => NotFound(result.Message!),
+            ServiceOutcome.Invalid => Validation(result.Errors),
+            ServiceOutcome.Conflict => Conflict(result.Message!),
+            _ => throw new ArgumentOutOfRangeException(nameof(result), result.Outcome, "Kết cục không xác định."),
+        };
 }
 
 /// <summary>Thân phản hồi lỗi rút gọn, đủ cho frontend hiển thị.</summary>

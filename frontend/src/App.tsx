@@ -11,6 +11,7 @@ import { HomePage } from '@/pages/HomePage'
 import { MenuPage } from '@/pages/MenuPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import { OrderLookupPage } from '@/pages/OrderLookupPage'
+import { ReservationManagePage } from '@/pages/ReservationManagePage'
 import { ReservationPage } from '@/pages/ReservationPage'
 
 const router = createBrowserRouter([
@@ -22,6 +23,8 @@ const router = createBrowserRouter([
       { path: '/mon-an/:slug', element: <DishDetailPage /> },
       { path: '/dat-mon', element: <CheckoutPage /> },
       { path: '/dat-ban', element: <ReservationPage /> },
+      { path: '/dat-ban/:code', element: <ReservationManagePage /> },
+      { path: '/dat-ban/:code/doi-lich', element: <ReservationManagePage isEditing /> },
       { path: '/tra-cuu', element: <OrderLookupPage /> },
       { path: '/tra-cuu/:code', element: <OrderLookupPage /> },
       { path: '/cau-chuyen', element: <BlogPage /> },

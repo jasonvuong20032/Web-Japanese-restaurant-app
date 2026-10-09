@@ -208,7 +208,7 @@ export function MenuPage() {
         title={activeCategory?.name ?? 'Thực đơn'}
         description={
           activeCategory?.description ??
-          'Một trăm hai mươi món, chia theo bảy nhóm. Lọc theo nhóm, mức giá, độ cay hoặc gõ thẳng tên món — tìm không dấu cũng ra.'
+          'Hai trăm năm mươi món, chia theo mười hai nhóm. Lọc theo nhóm, mức giá, độ cay hoặc gõ thẳng tên món — tìm không dấu cũng ra.'
         }
       >
         <div className="relative max-w-md">

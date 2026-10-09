@@ -44,6 +44,10 @@ ENV ASPNETCORE_ENVIRONMENT=Production \
 
 COPY --from=api /app ./
 
+# Thư mục chứa file SQLite. Phải cấp quyền ghi cho người dùng thường trước khi đổi user:
+# /app thuộc root, thiếu bước này thì API không tạo được database và dừng ngay lúc khởi động.
+RUN mkdir -p /app/App_Data && chown $APP_UID /app/App_Data
+
 # Chạy bằng người dùng thường, không chạy bằng root.
 USER $APP_UID
 

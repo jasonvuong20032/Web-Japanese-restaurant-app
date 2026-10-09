@@ -13,6 +13,9 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:8080
+    volumes:
+      # Giữ file SQLite (đơn hàng, đặt bàn) qua các lần khởi động lại và build lại container.
+      - app_data:/app/App_Data
     # Không publish cổng ra ngoài: chỉ Caddy được nói chuyện với app,
     # nhờ vậy không ai vào thẳng bằng HTTP được.
     expose:
@@ -42,5 +45,6 @@ services:
       - app
 
 volumes:
+  app_data:
   caddy_data:
   caddy_config:

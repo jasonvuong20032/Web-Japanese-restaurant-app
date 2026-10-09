@@ -8,6 +8,7 @@ import { formatClock, formatDateTime, formatPrice } from '@/lib/format'
 import { useAsync } from '@/hooks/useAsync'
 import { usePageTitle } from '@/hooks/usePageTitle'
 import { Button, LinkButton } from '@/components/ui/Button'
+import { ConfirmAction } from '@/components/ui/ConfirmAction'
 import { ErrorState, Skeleton } from '@/components/ui/Feedback'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { SmartImage } from '@/components/ui/SmartImage'
@@ -30,7 +31,8 @@ export function OrderLookupPage() {
 
   if (!code) return <LookupForm />
 
-  return <OrderResult code={code} preloaded={justCreated?.code === code ? justCreated : undefined} />
+  // key: đổi sang mã khác thì dựng lại từ đầu, không giữ trạng thái huỷ của đơn trước.
+  return <OrderResult key={code} code={code} preloaded={justCreated?.code === code ? justCreated : undefined} />
 }
 
 function LookupForm() {
@@ -40,21 +42,24 @@ function LookupForm() {
   const submit = (event: FormEvent) => {
     event.preventDefault()
     const trimmed = code.trim().toUpperCase()
-    if (trimmed) navigate(`/tra-cuu/${encodeURIComponent(trimmed)}`)
+    if (!trimmed) return
+
+    // Một ô nhập cho cả hai loại mã: khách không cần nhớ mã nào tra ở đâu.
+    navigate(trimmed.startsWith('RS-') ? `/dat-ban/${encodeURIComponent(trimmed)}` : `/tra-cuu/${encodeURIComponent(trimmed)}`)
   }
 
   return (
     <>
       <PageHeader
         eyebrow="ご注文の確認"
-        title="Tra cứu đơn hàng"
-        description="Nhập mã đơn dạng ST-XXXXXX mà quán gửi cho bạn sau khi đặt món."
+        title="Tra cứu đơn hàng & đặt bàn"
+        description="Nhập mã đơn hàng (ST-XXXXXX) hoặc mã đặt bàn (RS-XXXXXX) mà quán gửi cho bạn."
       />
 
       <div className="container-page py-14">
         <form onSubmit={submit} className="mx-auto max-w-md rounded-card border border-line bg-raised p-6">
           <label htmlFor="order-code" className="block text-sm font-medium text-ink-soft">
-            Mã đơn hàng
+            Mã đơn hàng hoặc mã đặt bàn
           </label>
           <input
             id="order-code"
@@ -69,8 +74,8 @@ function LookupForm() {
           </Button>
 
           <p className="mt-4 text-xs text-ink-muted">
-            Đơn hàng được lưu trong bộ nhớ máy chủ nên sẽ mất khi API khởi động lại — đây là bản demo
-            cho bài tập.
+            Đơn chưa được bếp nhận làm thì tự huỷ được ngay tại đây. Lượt đặt bàn thì đổi giờ hoặc huỷ
+            được trước giờ hẹn.
           </p>
         </form>
       </div>
@@ -80,7 +85,9 @@ function LookupForm() {
 
 function OrderResult({ code, preloaded }: { code: string; preloaded?: Order }) {
   const lookup = useAsync((signal) => api.getOrder(code, signal), [code])
-  const order = preloaded ?? lookup.data
+  // Bản trả về sau khi huỷ mới nhất, nên được ưu tiên hơn bản tải lúc đầu.
+  const [updated, setUpdated] = useState<Order>()
+  const order = updated ?? preloaded ?? lookup.data
 
   if (!order && lookup.isLoading) {
     return (
@@ -168,6 +175,16 @@ function OrderResult({ code, preloaded }: { code: string; preloaded?: Order }) {
                   )
                 })}
               </ol>
+            )}
+
+            {order.status === 'Received' && (
+              <ConfirmAction
+                className="mt-6"
+                label="Huỷ đơn"
+                question="Huỷ đơn này? Bếp sẽ không làm các món trong đơn và bạn không bị tính tiền."
+                confirmLabel="Huỷ đơn"
+                onConfirm={async () => setUpdated(await api.cancelOrder(order.code))}
+              />
             )}
           </section>
 
