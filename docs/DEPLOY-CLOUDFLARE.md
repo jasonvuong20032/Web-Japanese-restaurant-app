@@ -7,7 +7,7 @@
 **Bản đang chạy:** <https://web-japanese-restaurant-app.pages.dev> — Cloudflare Pages phải build từ
 nhánh `main` (Settings → Builds & deployments → Production branch).
 
-Khác với bản Vercel, frontend ở đây **không gọi thẳng sang Render**. Một Pages Function
+Frontend **không gọi thẳng sang Render**. Một Pages Function
 (`frontend/functions/api/[[path]].ts`) đứng giữa và chuyển tiếp mọi request `/api/*`:
 
 ```
@@ -21,7 +21,7 @@ Nhờ vậy trình duyệt chỉ thấy **một origin**:
 - **Không phải cấu hình CORS** trên API.
 - Frontend giữ đường dẫn mặc định `/api` — **không đặt** `VITE_API_BASE_URL`, không phải build lại
   frontend khi đổi địa chỉ API.
-- Các bản **preview** của từng nhánh cũng gọi được API (bản Vercel thì bị CORS chặn).
+- Các bản **preview** của từng nhánh cũng gọi được API (khi đã đặt `API_ORIGIN` cho môi trường Preview).
 
 ---
 
@@ -40,7 +40,7 @@ Nhờ vậy trình duyệt chỉ thấy **một origin**:
    | Instance Type | `Free` |
    | Health Check Path | `/health` |
 
-   **Không cần** biến `Cors__AllowedOrigins__0` như bản Vercel — proxy đã lo phần đó.
+   **Không cần** cấu hình CORS (biến `Cors__AllowedOrigins__0`) — proxy đã lo phần đó.
 
 4. Bấm **Deploy**. Lần đầu mất 5–10 phút. Xong thì kiểm tra:
 
@@ -81,7 +81,7 @@ Ghi lại URL này (không kèm `/api`) — bước sau cần đến.
 
 4. **Save and Deploy**. Vài phút sau có địa chỉ dạng `https://sakura-tei.pages.dev`.
 
-Pages tự lo hai việc mà bản Vercel phải khai báo trong `vercel.json`:
+Pages tự lo hai việc mà nhiều nền tảng khác phải tự cấu hình:
 
 - **Chuyển trang kiểu SPA.** `dist/` không có `404.html`, nên Pages coi đây là single-page app và trả
   `index.html` cho mọi đường dẫn — vào thẳng `/thuc-don` hay F5 giữa trang vẫn chạy.

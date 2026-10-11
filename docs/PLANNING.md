@@ -110,8 +110,8 @@ Service là singleton còn `DbContext` thì không nên sống lâu, nên servic
 
 ### 3.2 Kiến trúc khi deploy
 
-Ở môi trường chạy thật, frontend **không** được host riêng. Bản build của Vite được đặt vào
-`wwwroot` của API, và chính API phục vụ luôn các file tĩnh:
+Khi build cho môi trường chạy thật (`Dockerfile`), bản build của Vite được đặt vào `wwwroot` của
+API, nên một process API phục vụ được cả web lẫn API:
 
 ```
 ┌───────────────────────────────────────────┐
@@ -134,7 +134,10 @@ Hai chi tiết dễ bỏ sót đã xử lý trong `Program.cs`:
 - `/api` có fallback riêng trả **404 JSON**. Nếu để đường dẫn API sai rơi xuống fallback SPA,
   client sẽ nhận HTML và `response.json()` vỡ bằng một lỗi không liên quan tới nguyên nhân thật.
 
-Chi tiết các bước và bẫy khi triển khai nằm ở [DEPLOY.md](DEPLOY.md).
+Bản đang chạy thật đặt frontend trên **Cloudflare Pages** và API trên **Render**: một Pages Function
+chuyển mọi request `/api/*` sang Render, nên trình duyệt vẫn chỉ thấy một domain. Render build API từ
+`Dockerfile`, và vì `Dockerfile` đóng gói luôn frontend vào `wwwroot`, địa chỉ Render cũng mở ra được
+toàn bộ website — dùng làm link dự phòng. Các bước cấu hình nằm ở [DEPLOY-CLOUDFLARE.md](DEPLOY-CLOUDFLARE.md).
 
 ---
 
@@ -383,7 +386,7 @@ khi không có kết quả.
 
 **Database trên Render gói Free không bền.** Gói Free không có ổ đĩa lưu lâu dài: mỗi lần deploy lại,
 hoặc khi dịch vụ ngủ (15 phút không ai truy cập) rồi thức dậy, file SQLite được tạo lại từ dữ liệu mẫu
-và các đơn, lượt đặt cũ mất. Ở máy và khi chạy bằng Docker Compose (có volume) thì dữ liệu còn mãi.
+và các đơn, lượt đặt cũ mất. Chạy ở máy thì dữ liệu còn mãi.
 Muốn bền trên production: gắn Render Disk (trả phí) hoặc chuyển sang Supabase/PostgreSQL — chỉ phải
 đổi `UseSqlite` trong `DatabaseSetup`, phần còn lại giữ nguyên.
 

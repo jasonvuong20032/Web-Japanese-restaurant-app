@@ -13,7 +13,7 @@
 | Sinh viên thực hiện | Vương Quang Tuấn |
 | Thương hiệu | **Sakura Tei** (さくら亭) — thương hiệu **hư cấu**, logo tự thiết kế |
 | Mã nguồn (Public) | <https://github.com/jasonvuong20032/Web-Japanese-restaurant-app> — nhánh `main` |
-| Website đã deploy | <https://web-japanese-restaurant-app.pages.dev> |
+| Website đã deploy | <https://web-japanese-restaurant-app.pages.dev> (chính) · <https://sakura-api-dro3.onrender.com> (dự phòng, trên Render) |
 | Database | **SQLite** qua Entity Framework Core 9 — 6 bảng |
 | Hạ tầng | Cloudflare Pages (frontend) + Render (API .NET) |
 | Ngày nộp | 17/10/2026 |
@@ -383,15 +383,16 @@ Thử nhanh trên bản đã deploy:
 
 | File | Loại tài liệu | Trả lời câu hỏi | Người đọc chính |
 | --- | --- | --- | --- |
-| [`README.md`](../README.md) | Cổng vào repo | Dự án là gì, chạy thế nào, tài liệu nằm đâu, link demo ở đâu? | Bất kỳ ai mở repo |
+| [`README.md`](../README.md) | Cổng vào repo | Dự án là gì, chạy và kiểm thử thế nào, cấu trúc thư mục, tài liệu nằm đâu, link demo ở đâu? | Bất kỳ ai mở repo |
 | [`docs/BAO-CAO.md`](BAO-CAO.md) | Báo cáo nộp bài | Dự án đáp ứng đề bài thế nào? (file này) | Giảng viên |
 | [`docs/PRD.md`](PRD.md) | Tài liệu yêu cầu sản phẩm | **Làm cái gì, cho ai, vì sao, thế nào là xong?** | Người làm sản phẩm, lập trình viên, AI |
 | [`docs/DESIGN.md`](DESIGN.md) | Tài liệu thiết kế | **Trông như thế nào?** Logo, màu, chữ, bố cục, thành phần giao diện | Người thiết kế, lập trình viên frontend, AI |
-| [`docs/PLANNING.md`](PLANNING.md) | Kế hoạch kỹ thuật | **Xây như thế nào?** Kiến trúc, database, hợp đồng API, quy tắc nghiệp vụ | Lập trình viên |
-| [`docs/README.md`](README.md) | Hướng dẫn phát triển | Chạy ở máy, cấu trúc thư mục, bảng endpoint, cách kiểm thử | Lập trình viên mới vào dự án |
-| [`docs/DEPLOY-CLOUDFLARE.md`](DEPLOY-CLOUDFLARE.md) | Hướng dẫn triển khai | Frontend lên Cloudflare Pages, API lên Render — **cách đang dùng** | Người vận hành |
-| [`docs/DEPLOY-VERCEL.md`](DEPLOY-VERCEL.md) | Hướng dẫn triển khai | Frontend lên Vercel, API lên Render | Người vận hành |
-| [`docs/DEPLOY.md`](DEPLOY.md) | Hướng dẫn triển khai | Tự dựng trên server riêng | Người vận hành |
+| [`docs/PLANNING.md`](PLANNING.md) | Kế hoạch kỹ thuật | **Xây như thế nào?** Kiến trúc, database, hợp đồng API, quy tắc nghiệp vụ, cách kiểm thử | Lập trình viên |
+| [`docs/DEPLOY-CLOUDFLARE.md`](DEPLOY-CLOUDFLARE.md) | Hướng dẫn triển khai | **Đưa lên mạng thế nào?** Frontend lên Cloudflare Pages, API lên Render | Người vận hành |
+
+Mỗi file trả lời **một** câu hỏi riêng, không file nào lặp nội dung của file khác. Ở prompt 12, ba
+file trùng lặp hoặc không còn dùng đã được bỏ: `docs/README.md` (gộp phần còn thiếu vào `README.md`
+ở gốc), `DEPLOY.md` (tự dựng server bằng Docker) và `DEPLOY-VERCEL.md` (không dùng Vercel).
 
 ### 4.2 PRD.md và DESIGN.md có tác dụng gì?
 
@@ -434,7 +435,7 @@ Viết bằng Markdown vì đây là văn bản thuần: Git theo dõi được 
 Dự án được xây cùng **Claude Code**, trợ lý lập trình AI chạy trong VS Code. Mỗi prompt lớn kết thúc
 bằng một commit; các commit do AI viết có dòng `Co-Authored-By: Claude`, nên lịch sử Git ghi lại
 khá trọn vẹn tiến trình làm việc. Phần "Yêu cầu" của prompt 1–7 được tóm tắt lại từ lịch sử commit;
-prompt 8–10 ghi lại theo lời nhắn gốc (gõ không dấu, thêm dấu cho dễ đọc).
+prompt 8–12 ghi lại theo lời nhắn gốc (gõ không dấu, thêm dấu cho dễ đọc).
 
 ### 5.1 Tổng quan
 
@@ -450,6 +451,8 @@ prompt 8–10 ghi lại theo lời nhắn gốc (gõ không dấu, thêm dấu c
 | 8 | 09/10/2026 | Viết tài liệu theo tiêu chí chấm, kiểm tra deploy, tạo nhánh | `BAO-CAO.md`, `PRD.md`, `DESIGN.md`, sửa số liệu cũ, nhánh `main`/`dev` | nhánh `dev` |
 | 9 | 09/10/2026 | Đối chiếu mọi thứ với ảnh đề bài | Bảng chấm thử: ước 4,5–5,5/10, chỉ ra 3 tiêu chí còn thiếu | — |
 | 10 | 09/10/2026 | Làm phần còn thiếu, refactor, push code | SQLite, huỷ đơn, đổi lịch, huỷ bàn, Google Maps, refactor, kiểm thử tự động | nhánh `dev` → `main` |
+| 11 | 09/10/2026 | Đưa bản mới lên mạng (chuỗi câu hỏi về Render, Cloudflare) | Render và Cloudflare build từ `main`; kiểm thử 21/21 trên server thật | `a291718` |
+| 12 | 11/10/2026 | Làm báo cáo Word, kiểm tra GitHub Public, bỏ tài liệu dư thừa | File Word có ảnh chụp; repo Public; còn 6 file .md | nhánh `main` |
 
 ### 5.2 Chi tiết từng prompt
 
@@ -599,6 +602,46 @@ Nhắn thêm trong lúc AI đang làm: *"Refactor nhé được không?"* và *"
   build API .NET.
 - Commit lên `dev`, gộp sang `main`, push cả hai nhánh lên GitHub.
 
+#### Prompt 11 — Đưa bản mới lên mạng
+
+**Yêu cầu** (một chuỗi tin nhắn ngắn, kèm ảnh chụp màn hình GitHub, Render, Cloudflare):
+
+> Server không load được món ăn á. · Thế giờ làm sao nộp nhánh main đk? · Giờ làm trên Render sao? ·
+> Vô dash Cloudflare đi. · Can you check for me API_ORIGIN? · Chỉ bằng tiếng Việt đi. · Link Render oke đk?
+
+**Kết quả.**
+
+- **Tìm đúng nguyên nhân "không load được món":** bản xem trước của nhánh `main` thiếu biến
+  `API_ORIGIN` ở môi trường Preview của Cloudflare. Website chính vẫn tải đủ 250 món, chỉ là bản cũ.
+- Hướng dẫn từng bước bằng tiếng Việt theo đúng màn hình người dùng gửi:
+  - Render: đổi service `sakura-api` sang build từ `main`.
+  - Cloudflare: đổi Production branch sang `main`, thêm `API_ORIGIN` cho Preview.
+  - GitHub: đổi nhánh mặc định sang `main`.
+- AI không đọc được cài đặt Cloudflare, nên nhờ người dùng gửi giá trị `API_ORIGIN`
+  (`https://sakura-api-dro3.onrender.com`), rồi tự kiểm tra từ đó.
+- Kiểm tra trên server thật: API mới trả `"database":"SQLite"`; script kiểm thử chạy **21/21 bước
+  đạt**; proxy Cloudflare chuyển đúng `PATCH`/`DELETE`.
+- Push một commit lên `main` để Cloudflare build lại production. Sau khoảng 30 giây website chính lên
+  bản mới; đặt thử một bàn trên website thật để xem trang quản lý lượt đặt, rồi xoá đi.
+- Phát hiện link Render cũng mở ra được toàn bộ website, dùng làm link dự phòng.
+
+#### Prompt 12 — Báo cáo Word, kiểm tra GitHub Public, bỏ tài liệu dư thừa
+
+**Yêu cầu:**
+
+> Làm docs Word cho tui đi nha một cách chi tiết, và xem GitHub có để Public chưa.
+
+Nhắn thêm trong lúc AI đang làm: *"Loại bỏ những docs dư thừa trong thư mục docs đi nha."*
+
+**Kết quả.**
+
+- Kiểm tra GitHub: repo **Public** (`"private": false`, `"visibility": "public"`); người không đăng
+  nhập vẫn mở được trang repo và file báo cáo trên `main`.
+- Làm báo cáo Word `docs/BAO-CAO-Sakura-Tei.docx` theo đúng các mục của đề: trang bìa, mục lục, các
+  chương như báo cáo này, kèm ảnh chụp màn hình website thật.
+- Bỏ 3 file .md trùng lặp hoặc không còn dùng (mục 4.1), gộp phần còn thiếu vào `README.md` ở gốc,
+  sửa mọi liên kết trỏ tới các file đã bỏ.
+
 ### 5.3 Rút kinh nghiệm khi làm việc với AI
 
 - **Mỗi prompt một mục tiêu rõ ràng.** Prompt "thêm HTTPS" cho kết quả gọn và kiểm chứng được hơn
@@ -620,7 +663,8 @@ Nhắn thêm trong lúc AI đang làm: *"Refactor nhé được không?"* và *"
 
 | Thành phần | Địa chỉ |
 | --- | --- |
-| Website | <https://web-japanese-restaurant-app.pages.dev> |
+| Website (chính) | <https://web-japanese-restaurant-app.pages.dev> |
+| Website (dự phòng) | <https://sakura-api-dro3.onrender.com> — Render phục vụ cả web lẫn API |
 | API (gọi qua cùng domain) | <https://web-japanese-restaurant-app.pages.dev/api/categories> |
 | Mã nguồn | <https://github.com/jasonvuong20032/Web-Japanese-restaurant-app> |
 
@@ -678,8 +722,8 @@ Từng bước cấu hình, cách kiểm tra và bảng đọc lỗi: [DEPLOY-CL
 | 2 | Có dùng database CSV / SQLite / Supabase | 3 | **SQLite** qua EF Core, 6 bảng; thực đơn 250 món đọc từ database (mục 3.3) | ✅ Đạt |
 | 3 | Ít nhất 2 chức năng chỉnh sửa database | 2 | 5 thao tác ghi vào SQLite: đặt món (INSERT), huỷ đơn (UPDATE), đặt bàn (INSERT), đổi lịch (UPDATE), huỷ bàn (DELETE) — mục 3.2 | ✅ Đạt |
 | 4 | Nhúng Google Map hoặc video YouTube | 0,5 | Google Maps ở trang Về Chúng Tôi, mục "Đường tới quán" | ✅ Đạt |
-| 5 | Sử dụng các file .md | 0,5 | 9 file (mục 4) | ✅ Đạt |
-| 6 | Push code lên GitHub, để Public | 0,5 | Repo Public, nhánh `main` và `dev` | ✅ Đạt |
+| 5 | Sử dụng các file .md | 0,5 | 6 file, mỗi file một vai trò (mục 4) | ✅ Đạt |
+| 6 | Push code lên GitHub, để Public | 0,5 | Repo Public, nhánh `main` và `dev` — kiểm tra lại ngày 11/10/2026: người không đăng nhập vẫn xem được | ✅ Đạt |
 | 7 | Deploy | 0,5 | Cloudflare Pages + Render (mục 6) | ✅ Đạt |
 
 ### 7.2 Tiêu chí trừ điểm
